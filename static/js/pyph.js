@@ -16,7 +16,7 @@ $('#picture-upload').fileUploadUI({
     buildDownloadRow: function(file) {
         if(file !== undefined) {
             return $('<div class="picture-thumb">' +
-                '<img src="' + file.url + '" \/>' +
+                '<img src="' + file.thumb + '" \/>' +
                 '<a href="/delete/' + file.name + '" title="Delete"' +
                 ' class="picture-delete">' +
                 '<img src="\/static\/icons\/delete.png" alt="delete"\/>' +
@@ -44,7 +44,13 @@ $('#picture-upload').fileUploadUI({
 });
 
 $('.picture-error').live('click', function() {
-    $(this).fadeOut(400, function(){$(this).remove();});
+    $(this).parent().fadeOut(400, function(){
+        $(this).remove();
+        if($('.picture-thumb').length == 0) {
+            $('#picture-bar').append(
+                "<span id='no-pictures'>No pictures yet. Upload one!<\/span>");
+        }
+    });
 });
 
 $('.picture-delete').live('click', function(e) {
