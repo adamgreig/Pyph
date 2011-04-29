@@ -1,0 +1,12 @@
+# Pyph Config
+# Save this file as config.py and edit it appropriately.
+
+# Debug mode. Set to True to enable debug, which will show informative
+# error messages and auto-reload on code change. Set to False for production.
+DEBUG = True
+
+# Secret key. Set to something random.
+SECRET_KEY = "change me!"
+
+# Upload directory
+UPLOADED_FILES_DEST = "images/"

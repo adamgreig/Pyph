@@ -39,18 +39,18 @@ footer      { clear: both; }
 }
 
 div.picture-thumb {
-    display: inline-block;
+    display: inline;
     position: relative;
     border-radius: 5px;
     background-color: white;
     padding: 5px;
     margin-right: 3px;
     width: 86px;
-    height: 70px;
 }
 
 div.picture-thumb img {
     margin-right: 2px;
+    position: relative;
 }
 
 a img {
