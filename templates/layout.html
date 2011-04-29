@@ -1,0 +1,79 @@
+<!doctype html>
+<title>Pyph</title>
+
+<!-- css -->
+<link type="text/css" rel="stylesheet" 
+    href="http://fonts.googleapis.com/css?family=Smythe" />
+<link type="text/css" rel="stylesheet" id="theme"
+    href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/themes/base/jquery-ui.css" />
+<link type="text/css" rel="stylesheet"
+    href="{{ url_for('static', filename='css/jquery.Jcrop.css') }}" />
+<link type="text/css" rel="stylesheet"
+    href="{{ url_for('static', filename='css/jquery.fileupload-ui.css') }}" />
+<link type="text/css" rel="stylesheet"
+    href="{{ url_for('static', filename='css/style.css') }}" />
+
+
+<!-- header with image select/upload -->
+<header>
+    <h1>Pyph</h1> 
+    <div id="picture-bar-wrapper">
+        <div id="picture-bar">
+            {% block picture_bar %}
+            <span id="no-pictures">No pictures yet. Upload one!</span>
+            {% endblock %}
+        </div>
+        <form id="picture-upload" action="/upload" method="POST"
+            enctype="multipart/form-data">
+            <input type="file" name="file" multiple />
+            <button type="submit">Upload</button>
+            <img src="{{ url_for('static', filename='icons/add.png') }}"
+                alt="+" title="Upload Images"/>
+        </form>
+    </div>
+</header>
+
+<!-- image display -->
+
+<!-- tool select -->
+
+<!-- footer -->
+<footer>
+    <p>Written by Adam Greig, released under <a
+    href="http://creativecommons.org/licenses/by/2.0/uk/" title="CC-BY 2.0 UK">
+    CC BY 2.0 UK</a>.  <a href="https://github.com/adamgreig/Pyph"
+    title="source on github"> Pyph Source</a>.</p>
+    <p>Uses <a href="http://jquery.com"
+    title="jQuery homepage">jQuery</a>, <a href="http://jqueryui.com"
+    title="jQuery UI homepage">jQuery UI</a>, <a
+    href="http://deepliquid.com/content/Jcrop_Manual.html" title="jCrop
+    plugin">jCrop</a>, <a href="http://aquantum-demo.appspot.com/file-upload"
+    title="jQuery-File-Upload plugin homepage">jQuery File Upload</a>, <a
+    href="http://www.google.com/webfonts/family?family=Smythe&subset=latin">
+    Smythe font</a>, <a href="http://www.famfamfam.com/lab/icons/silk/"
+    title="Silk icons on FamFamFam">Silk icons</a> and <a
+    href="http://flask.pocoo.org" title="Flask Python microframework">Flask</a>
+    on <a href="http://python.org" title="Python
+    homepage">Python</a>. Designed for <a href="http://www.google.com/chrome"
+    title="Google Chrome">Google Chrome</a>, may work elsewhere.
+</footer>
+
+<!-- scripts -->
+<script
+    src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.js">
+</script>
+<script
+    src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.js">
+</script>
+<script
+    src="{{ url_for('static', filename='js/jquery.Jcrop.min.js') }}">
+</script>
+<script
+    src="{{ url_for('static', filename='js/jquery.fileupload.js') }}">
+</script>
+<script
+    src="{{ url_for('static', filename='js/jquery.fileupload-ui.js') }}">
+</script>
+<script
+    src="{{ url_for('static', filename='js/pyph.js') }}">
+</script>
