@@ -146,5 +146,11 @@ $('#l-image').live('click', function() {
     //jcrop_api = $.Jcrop('#l-image', {boxWidth: 500, boxHeight: 500});
 });
 
+// Make buttons out of buttons
+$('button').button();
+
+// Set up tipsy for appropriate elements
+$('.tip').tipsy();
+
 // Get the first pictures
 refresh_pictures();

@@ -9,6 +9,8 @@
 <link type="text/css" rel="stylesheet"
     href="{{ url_for('static', filename='css/jquery.Jcrop.css') }}" />
 <link type="text/css" rel="stylesheet"
+    href="{{ url_for('static', filename='css/tipsy.css') }}" />
+<link type="text/css" rel="stylesheet"
     href="{{ url_for('static', filename='css/jquery.fileupload-ui.css') }}" />
 <link type="text/css" rel="stylesheet/less"
     href="{{ url_for('static', filename='css/style.less') }}" />
@@ -16,7 +18,7 @@
 
 <!-- header with image select/upload -->
 <header>
-    <h1>Pyph</h1> 
+    <h1 class="tip" title="rocks!">Pyph</h1> 
     <div id="picture-bar-wrapper">
         <div id="picture-bar">
             {% block picture_bar %}
@@ -24,7 +26,7 @@
             {% endblock %}
         </div>
         <form id="picture-upload" action="/upload" method="POST"
-            enctype="multipart/form-data">
+            enctype="multipart/form-data" class="tip" title="upload image">
             <input type="file" name="file" multiple />
             <button type="submit">Upload</button>
             <img src="{{ url_for('static', filename='icons/add.png') }}"
@@ -35,7 +37,7 @@
 <div class="clear"></div>
 
 <!-- image display -->
-<div id="display-wrapper">
+<section id="display-wrapper">
     <div id="l-image-wrapper">
         <img id="l-image" src="/static/icons/picture.png" />
         <div id="l-image-h-wrapper">
@@ -49,10 +51,58 @@
         </div>
     </div>
     <div class="clear"></div>
-</div>
-
+</section>
 <div class="clear"></div>
+
 <!-- tool select -->
+<section id="toolbox-wrapper">
+    <button id="zoom" class="tool tip" title="zoom">
+        <img src="/static/icons/zoom.png" alt="zoom" />
+    </button>
+    <button id="l2r" class="tool tip" title="copy left image to right image">
+        <img src="/static/icons/picture.png" alt="l" />
+        <img src="/static/icons/arrow_right.png" alt="->" />
+        <img src="/static/icons/picture.png" alt="r" />
+    </button>
+    <button id="r2l" class="tool tip" title="copy right image to left image">
+        <img src="/static/icons/picture.png" alt="l" />
+        <img src="/static/icons/arrow_left.png" alt="<-" />
+        <img src="/static/icons/picture.png" alt="r" />
+    </button>
+    <button id="save" class="tool tip" title="save image to session">
+        <img src="/static/icons/disk.png" alt="save" />
+    </button>
+    <button id="download" class="tool tip" title="download image to PC">
+        <img src="/static/icons/drive_disk.png" alt="download" />
+    </button>
+    <button id="crop" class="tool tip" title="crop">
+        <img src="/static/icons/cut.png" alt="crop" />
+    </button>
+    <button id="resize" class="tool tip" title="resize">
+        <img src="/static/icons/arrow_out.png" alt="resize" />
+    </button>
+    <button id="rotate" class="tool tip" title="rotate">
+        <img src="/static/icons/arrow_rotate_anticlockwise.png" alt="rotate" />
+    </button>
+    <button id="morph" class="tool tip" title="morph">
+        <img src="/static/icons/lightning.png" alt="morph" />
+    </button>
+    <button id="colour_shift" class="tool tip" title="colour shift">
+        <img src="/static/icons/color_wheel.png" alt="colour shift" />
+    </button>
+    <button id="lighting_shift" class="tool tip" title="lighting shift">
+        <img src="/static/icons/contrast.png" alt="lighting shift" />
+    </button>
+    <button id="add_noise" class="tool tip" title="add noise">
+        <img src="/static/icons/sound.png" alt="add noise" />
+    </button>
+    <button id="filter" class="tool tip" title="filter">
+        <img src="/static/icons/layers.png" alt="filter" />
+    </button>
+    <button id="enhance" class="tool tip" title="enhance">
+        <img src="/static/icons/rosette.png" alt="enhance" />
+    </button>
+</section>
 
 <!-- footer -->
 <footer>
@@ -86,6 +136,10 @@
     <a href="http://aquantum-demo.appspot.com/file-upload"
         title="jQuery-File-Upload plugin homepage">
         jQuery File Upload
+    </a>,
+    <a href="http://onehackoranother.com/projects/jquery/tipsy/"
+        title="tipsy jquery plugin">
+        tipsy
     </a>,
     <a href="http://www.google.com/webfonts/family?family=Smythe&subset=latin">
         Smythe font
@@ -143,6 +197,9 @@
 </script>
 <script
     src="{{ url_for('static', filename='js/jquery.fileupload-ui.js') }}">
+</script>
+<script
+    src="{{ url_for('static', filename='js/jquery.tipsy.js') }}">
 </script>
 <script
     src="{{ url_for('static', filename='js/less-1.0.41.min.js') }}">

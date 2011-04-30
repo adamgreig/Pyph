@@ -103,7 +103,7 @@ def delete(filename):
 
     # Same again for histogram
     if os.path.exists(path+".h.png"):
-        os.remote(path+".h.png")
+        os.remove(path+".h.png")
 
     return "OK"
 
