@@ -103,11 +103,19 @@ function set_display(src) {
         jcrop_api.destroy();
     }
 
+    if($('#zoom').attr('checked')) {
+        remove_zoom();
+        $('#zoom').checked = false;
+        //$('#zoom').button("refresh");
+        //$('#zoom-label').button("refresh");
+    }
+
     $('#l-image')[0].src = src;
     $('#r-image')[0].src = src;
 
     $('#l-image-h')[0].src = src_h;
     $('#r-image-h')[0].src = src_h;
+
 }
 
 // Fetch the starting items, removing the "No pictures" note if appropriate
@@ -130,6 +138,27 @@ function refresh_pictures() {
     });
 }
 
+// Apply zoom to the pictures
+function apply_zoom() {
+    $('#l-image').wrap('<a href="' + $('#l-image')[0].src +
+        '" class="cloud-zoom" id="l-a" />');
+    $('#l-a').attr('rel', 'position: "inside"');
+    $('#r-image').wrap('<a href="' + $('#r-image')[0].src +
+        '" class="cloud-zoom" id="r-a" />');
+    $('#r-a').attr('rel', 'position: "inside"');
+    $('.cloud-zoom').CloudZoom();
+}
+
+// Remove zoom from the pictures
+function remove_zoom() {
+    var l = $('#l-image').clone();
+    var r = $('#r-image').clone();
+    $('#l-image-wrapper').children().first().remove();
+    $('#r-image-wrapper').children().first().remove();
+    $('#l-image-wrapper').prepend(l);
+    $('#r-image-wrapper').prepend(r);
+}
+
 // Bind the reset link
 $('#reset-link').click(function(e) {
     e.preventDefault();
@@ -148,9 +177,19 @@ $('#l-image').live('click', function() {
 
 // Make buttons out of buttons
 $('button').button();
+$('#zoom').button();
 
 // Set up tipsy for appropriate elements
 $('.tip').tipsy();
+
+// Bind toolbox buttons
+$('#zoom-label').click(function() {
+    if($("#zoom").attr('checked')) {
+        remove_zoom();
+    } else {
+        apply_zoom();
+    }
+});
 
 // Get the first pictures
 refresh_pictures();
