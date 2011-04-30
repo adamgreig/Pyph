@@ -105,9 +105,8 @@ function set_display(src) {
 
     if($('#zoom').attr('checked')) {
         remove_zoom();
-        $('#zoom').checked = false;
-        //$('#zoom').button("refresh");
-        //$('#zoom-label').button("refresh");
+        $('#zoom').attr('checked', false);
+        $('#zoom').button("refresh");
     }
 
     $('#l-image')[0].src = src;
