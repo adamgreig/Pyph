@@ -10,3 +10,6 @@ SECRET_KEY = "baeloovahph4johzae1ahb9thiThuhoow9axae9ail7iux7hiemoo3pei5pae4ei"
 
 # Upload directory
 UPLOADED_FILES_DEST = "images/"
+
+# Max upload filesize
+MAX_CONTENT_LENGTH = 4 * 1024 * 1024

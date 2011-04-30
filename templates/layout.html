@@ -10,8 +10,8 @@
     href="{{ url_for('static', filename='css/jquery.Jcrop.css') }}" />
 <link type="text/css" rel="stylesheet"
     href="{{ url_for('static', filename='css/jquery.fileupload-ui.css') }}" />
-<link type="text/css" rel="stylesheet"
-    href="{{ url_for('static', filename='css/style.css') }}" />
+<link type="text/css" rel="stylesheet/less"
+    href="{{ url_for('static', filename='css/style.less') }}" />
 
 
 <!-- header with image select/upload -->
@@ -28,13 +28,30 @@
             <input type="file" name="file" multiple />
             <button type="submit">Upload</button>
             <img src="{{ url_for('static', filename='icons/add.png') }}"
-                alt="+" title="Upload Images" />
+                alt="upload" title="Upload Images" />
         </form>
     </div>
 </header>
+<div class="clear"></div>
 
 <!-- image display -->
+<div id="display-wrapper">
+    <div id="l-image-wrapper">
+        <img id="l-image" src="/static/icons/picture.png" />
+        <div id="l-image-h-wrapper">
+            <img id="l-image-h" src="/static/icons/picture.png" />
+        </div>
+    </div>
+    <div id="r-image-wrapper">
+        <img id="r-image" src="/static/icons/picture.png" />
+        <div id="r-image-h-wrapper">
+            <img id="r-image-h" src="/static/icons/picture.png" />
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
 
+<div class="clear"></div>
 <!-- tool select -->
 
 <!-- footer -->
@@ -55,7 +72,7 @@
 </p>
 
 <p>
-    Uses 
+    Website uses 
     <a href="http://jquery.com" title="jQuery homepage">
         jQuery
     </a>,
@@ -73,25 +90,37 @@
     <a href="http://www.google.com/webfonts/family?family=Smythe&subset=latin">
         Smythe font
     </a>,
+    <a href="http://lesscss.org/" title="LessCSS">
+        LessCSS
+    </a> and
     <a href="http://www.famfamfam.com/lab/icons/silk/"
         title="Silk icons on FamFamFam">
     Silk icons
-    </a> and
+    </a>. Designed for
+    <a href="http://www.google.com/chrome" title="Google Chrome">
+        Google Chrome
+    </a>, may work elsewhere.<br />
+    Backend uses
     <a href="http://flask.pocoo.org" title="Flask Python microframework">
         Flask
     </a> with
     <a href="http://packages.python.org/Flask-Uploads/"
         title="Flask-Uploads extension">
         Flask-Uploads
+    </a>,
+    <a href="http://www.pythonware.com/products/pil/" title="PIL">
+        PIL
+    </a>,
+    <a href="http://numpy.scipy.org/" title="numpy">
+        NumPy
+    </a> and
+    <a href="http://matplotlib.sourceforge.net/" title="matplotlib">
+        matplotlib
     </a> on
     <a href="http://python.org" title="Python homepage">
         Python
-    </a>. Designed for
-    <a href="http://www.google.com/chrome" title="Google Chrome">
-        Google Chrome
-    </a>, may work elsewhere.
+    </a>
 </p>
-
 <p>
     <a href="/reset" title="reset everything" id="reset-link">
         Click to reset your session
@@ -114,6 +143,9 @@
 </script>
 <script
     src="{{ url_for('static', filename='js/jquery.fileupload-ui.js') }}">
+</script>
+<script
+    src="{{ url_for('static', filename='js/less-1.0.41.min.js') }}">
 </script>
 <script
     src="{{ url_for('static', filename='js/pyph.js') }}">
