@@ -181,13 +181,25 @@ $('#zoom').button();
 // Set up tipsy for appropriate elements
 $('.tip').tipsy();
 
-// Bind toolbox buttons
+// Bind zoom button
 $('#zoom-label').click(function() {
     if($("#zoom").attr('checked')) {
         remove_zoom();
     } else {
         apply_zoom();
     }
+});
+
+// Bind "copy left to right" button
+$('#l2r').click(function() {
+    $('#r-image')[0].src = $('#l-image')[0].src;
+    $('#r-image-h')[0].src = $('#l-image-h')[0].src;
+});
+
+// Bind "copy right to left" button
+$('#r2l').click(function() {
+    $('#l-image')[0].src = $('#r-image')[0].src;
+    $('#l-image-h')[0].src = $('#r-image-h')[0].src;
 });
 
 // Get the first pictures
