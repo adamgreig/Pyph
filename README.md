@@ -10,5 +10,7 @@ Written by Adam Greig
 
 Copyright 2011
 
-All code licensed under a Creative Commons Attribution 2.0 UK: England & Wales
-License, see http://creativecommons.org/licenses/by/2.0/uk/
+All Pyph code released under the BSD license, see LICENSE for details.
+
+Other code and used under license from various authors, see individual files
+for details.

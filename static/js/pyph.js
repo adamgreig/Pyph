@@ -1,7 +1,7 @@
 // Pyph
 // A simple photo editor
 // Copyright 2011 Adam Greig
-// CC-BY 2.0 UK:England & Wales
+// Released under the simplified BSD license, see LICENSE
 
 // Set up the file upload button.
 $('#picture-upload').fileUploadUI({
