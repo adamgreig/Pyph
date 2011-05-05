@@ -7,6 +7,7 @@ import Image
 import os
 import uuid
 from flask import Flask, render_template, request, jsonify, abort, session
+from flask import send_file
 from flaskext import uploads
 
 from histogram import gen_histogram
@@ -17,25 +18,6 @@ app.config.from_object("config")
 photos = uploads.UploadSet('files', uploads.IMAGES)
 uploads.configure_uploads(app, photos)
 
-def handle_upload():
-    """
-    Store an incoming file, generate a thumbnail and histogram, add the details
-    to the session and return the required data for the page to update.
-    """
-    ip = request.environ["REMOTE_ADDR"]
-    name = uuid.uuid4().hex
-    name += os.path.splitext(request.files['file'].filename)[1]
-    filename = photos.save(request.files['file'], folder=ip, name=name)
-    path = photos.path(filename)
-    image = Image.open(path)
-    image.thumbnail((64,64))
-    image.save(path + ".t.jpg")
-    gen_histogram(path, path+".h.png")
-    photo = {"name": filename, "url": photos.url(filename)}
-    session['files'].append(photo)
-    session.modified = True
-    return jsonify(photo)
-    
 def setup_session():
     session['files'] = []
     for filename in os.listdir("images/stock/"):
@@ -61,7 +43,19 @@ def upload():
     if request.method == 'GET':
         return jsonify(files=session['files'])
     elif request.method == 'POST' and 'file' in request.files:
-        return handle_upload()
+        ip = request.environ["REMOTE_ADDR"]
+        name = uuid.uuid4().hex
+        name += os.path.splitext(request.files['file'].filename)[1]
+        filename = photos.save(request.files['file'], folder=ip, name=name)
+        path = photos.path(filename)
+        image = Image.open(path)
+        image.thumbnail((64,64))
+        image.save(path + ".t.jpg")
+        gen_histogram(path, path+".h.png")
+        photo = {"name": filename, "url": photos.url(filename)}
+        session['files'].append(photo)
+        session.modified = True
+        return jsonify(photo)
     else:
         abort(400)
 
@@ -106,6 +100,10 @@ def delete(filename):
         os.remove(path+".h.png")
 
     return "OK"
+
+@app.route("/download/<path:filename>")
+def download(filename):
+    return send_file(photos.path(filename), as_attachment=True)
 
 @app.route("/reset")
 def reset():

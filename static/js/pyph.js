@@ -73,10 +73,10 @@ $('.picture-delete').live('click', function(e) {
     e.preventDefault();
     e.stopPropagation();
     
-    src = $(this).siblings()[0].src
-    l_src = $('#l-image')[0].src;
+    src = $(this).siblings().attr('src')
+    l_src = $('#l-image').attr('src');
     if(l_src == src.slice(0, -6)) {
-        new_src = $('#picture-bar').children().children()[0].src;
+        new_src = $('#picture-bar').children().children().attr('src');
         if(new_src.slice(0, -6) == l_src) {
             if($('#picture-bar').children().children().length > 2) {
                 new_src = $('#picture-bar').children().children()[2].src;
@@ -109,11 +109,11 @@ function set_display(src) {
         $('#zoom').button("refresh");
     }
 
-    $('#l-image')[0].src = src;
-    $('#r-image')[0].src = src;
+    $('#l-image').attr('src', src);
+    $('#r-image').attr('src', src);
 
-    $('#l-image-h')[0].src = src_h;
-    $('#r-image-h')[0].src = src_h;
+    $('#l-image-h').attr('src', src_h);
+    $('#r-image-h').attr('src', src_h);
 
 }
 
@@ -130,7 +130,7 @@ function refresh_pictures() {
                 $('#picture-bar').append(element);
             });
 
-            set_display($('#picture-bar').children().children()[0].src);
+            set_display($('#picture-bar').children().children().attr('src'));
         } else {
             check_for_no_pictures();
         }
@@ -139,10 +139,10 @@ function refresh_pictures() {
 
 // Apply zoom to the pictures
 function apply_zoom() {
-    $('#l-image').wrap('<a href="' + $('#l-image')[0].src +
+    $('#l-image').wrap('<a href="' + $('#l-image').attr('src') +
         '" class="cloud-zoom" id="l-a" />');
     $('#l-a').attr('rel', 'position: "inside"');
-    $('#r-image').wrap('<a href="' + $('#r-image')[0].src +
+    $('#r-image').wrap('<a href="' + $('#r-image').attr('src') +
         '" class="cloud-zoom" id="r-a" />');
     $('#r-a').attr('rel', 'position: "inside"');
     $('.cloud-zoom').CloudZoom();
@@ -166,7 +166,7 @@ $('#reset-link').click(function(e) {
 
 // Bind each photo to load them onto the display panes
 $('.picture-thumb').live('click', function() {
-    set_display($(this).children()[0].src);
+    set_display($(this).children().attr('src'));
 });
 
 // Bind clicking on l-image to enable jCrop
@@ -192,14 +192,21 @@ $('#zoom-label').click(function() {
 
 // Bind "copy left to right" button
 $('#l2r').click(function() {
-    $('#r-image')[0].src = $('#l-image')[0].src;
-    $('#r-image-h')[0].src = $('#l-image-h')[0].src;
+    $('#r-image').attr('src', $('#l-image').attr('src'));
+    $('#r-image-h').attr('src', $('#l-image-h').attr('src'));
 });
 
 // Bind "copy right to left" button
 $('#r2l').click(function() {
-    $('#l-image')[0].src = $('#r-image')[0].src;
-    $('#l-image-h')[0].src = $('#r-image-h')[0].src;
+    $('#l-image').attr('src', $('#r-image').attr('src'));
+    $('#l-image-h').attr('src', $('#r-image-h').attr('src'));
+});
+
+// Bind "Download image to PC" button
+$('#download').click(function() {
+    var parts = $('#r-image').attr('src').split('/');
+    length = parts.length;
+    location.href = "/download/" + parts[length - 2] + "/" + parts[length - 1];
 });
 
 // Get the first pictures
