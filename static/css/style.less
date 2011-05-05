@@ -1,95 +1,50 @@
-@bgblue:    #93CCEA;
-@fgorange:  #FFBF00;
+/**********************************************************
+ * Layout
+ *********************************************************/
 
-html        { font-family: 'Smythe', arial, serif; }
-body        { background-color: @bgblue; }
-h1          { float: left; margin-left: 1em; font-size: 3em; }
-footer      { clear: both; position: relative; }
-a img       { border: 0; }
-
-.rounded-corners(@radius: 15px) {
-    border-radius: @radius;
-    -webkit-border-radius: @radius;
-    -moz-border-radius: @radius;
-}
-
-header {
-    height: 120px;
-}
-
-#picture-bar-wrapper {
-    .rounded-corners;
-    float: right;
-    background-color: @fgorange;
-    padding: 10px;
-    margin-bottom: 5px;
-    margin-right: 10px;
-}
-
-#picture-bar {
-    .rounded-corners;
-    background-color: @bgblue;
-    padding: 3px;
-    height: 80px;
+h1 {
     float: left;
-    overflow: auto;
-}
-
-#picture-upload {
-    .rounded-corners;
-    background-color: @bgblue;
-    border: 0;
-    padding: 5px;
-    float: right;
-    margin-left: 0.3em;
-    width: auto;
-    height: 32px;
-    top: 20px;
-}
-
-#no-pictures {
-    position: relative;
-    font-size: 1.2em;
-    top: 0.5em;
     margin-left: 1em;
-    margin-right: 1em;
 }
 
-div.picture-thumb {
-    .rounded-corners(5px);
-    display: inline;
-    position: relative;
-    background-color: white;
-    padding: 5px;
-    margin-right: 3px;
-    width: 86px;
-    height: 70px;
-    /*float: left;*/
-}
-
-div.picture-thumb img {
-    margin-right: 2px;
-    margin-top: auto;
-    margin-bottom: auto;
-}
-
-.clear {
+footer {
     clear: both;
 }
 
+#picture-bar-wrapper {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px;
+    width: 400px;
+    height: 100px;
+}
+
+#picture-bar {
+    position: absolute;
+    left: 10px;
+    padding: 3px;
+    width: 350px;
+    height: 90px;
+}
+
+#picture-upload {
+    position: absolute;
+    top: 34px;
+    right: 10px;
+    padding: 5px;
+    width: 20px;
+    height: 32px;
+}
+
 #display-wrapper {
-    background-color: @fgorange;
-    .rounded-corners;
     float: left;
 }
 
 .image-wrapper {
-    background-color: white;
-    .rounded-corners;
     float: left;
     padding: 20px;
     margin: 20px;
-    overflow: hide;
 }
 
 .image {
@@ -105,8 +60,6 @@ div.picture-thumb img {
 }
 
 #toolbox-wrapper {
-    background-color: @fgorange;
-    .rounded-corners;
     margin-top: 20px;
     padding: 5px;
 }
@@ -114,3 +67,64 @@ div.picture-thumb img {
 .tool {
     display: inline-block;
 }
+
+.clear {
+    clear: both;
+}
+
+/**********************************************************
+ * Appearance
+ *********************************************************/
+
+.rounded-corners(@radius: 15px) {
+    border-radius: @radius;
+    -webkit-border-radius: @radius;
+    -moz-border-radius: @radius;
+}
+
+a img {
+    border: 0;
+}
+
+#picture-bar-wrapper, #picture-bar, #picture-upload, #display-wrapper,
+  #toolbox-wrapper, .image-wrapper {
+    .rounded-corners;
+}
+
+.image-wrapper {
+    overflow: hide;
+}
+
+
+/**********************************************************
+ * Colours
+ *********************************************************/
+
+@bgblue:    #93CCEA;
+@fgorange:  #FFBF00;
+
+body, #picture-bar, #picture-upload {
+    background-color: @bgblue;
+}
+
+#picture-bar-wrapper, #display-wrapper, #toolbox-wrapper {
+    background-color: @fgorange;
+}
+
+.image-wrapper {
+    background-color: white;
+}
+
+
+/**********************************************************
+ * Typography
+ *********************************************************/
+
+html {
+    font-family: 'Smythe', arial, serif;
+}
+
+h1 {
+    font-size: 3em;
+}
+
