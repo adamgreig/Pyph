@@ -2,6 +2,108 @@
 // A simple photo editor
 // Copyright 2011 Adam Greig
 // Released under the simplified BSD license, see LICENSE
+// ******************************************************************
+
+/********************************************************************
+ * Helper Functions
+ *******************************************************************/
+
+// Check if any pictures are in the picture bar and if not add the
+// no pictures message.
+function check_for_no_pictures() {
+    if($('.picture-thumb').length == 0) {
+        $('#picture-bar').append(
+            "<span id='no-pictures'>No pictures yet. Upload one!<\/span>"
+        );
+    }
+}
+
+// Given a thumbnail source, set the display images and histos
+function set_display(src) {
+    src = src.slice(0, -6);
+    var src_h = src + ".h.png";
+    
+    if(jcrop_api !== undefined) {
+        jcrop_api.destroy();
+    }
+
+    if($('#zoom').attr('checked')) {
+        remove_zoom();
+        $('#zoom').attr('checked', false);
+        $('#zoom').button("refresh");
+    }
+
+    $('#l-image').attr('src', src);
+    $('#r-image').attr('src', src);
+
+    $('#l-image-h').attr('src', src_h);
+    $('#r-image-h').attr('src', src_h);
+
+}
+
+// Fetch the starting items, removing the "No pictures" note if appropriate
+function refresh_pictures() {
+    $.getJSON("/upload", function(data) {
+        $('#picture-bar').jcarousel('reset');
+        if(data.files.length > 0) {
+            $('#no-pictures').fadeOut(400, function(){$(this).remove();});
+            var options = $('#picture-upload').fileUploadUI('option');
+            $.each(data.files, function(index, file) {
+                element = options.buildDownloadRow(file)[0];
+                $('#picture-bar').jcarousel('add', index + 1, element);
+            });
+
+            $('#picture-bar').jcarousel('size', data.files.length);
+            $('.tip').tipsy();
+
+            set_display($('.picture-thumb').attr('src'));
+        } else {
+            check_for_no_pictures();
+        }
+    });
+}
+
+// Apply zoom to the pictures
+function apply_zoom() {
+    $('#l-image').wrap('<a href="' + $('#l-image').attr('src') +
+        '" class="cloud-zoom" id="l-a" />');
+    $('#l-a').attr('rel', 'position: "inside"');
+    $('#r-image').wrap('<a href="' + $('#r-image').attr('src') +
+        '" class="cloud-zoom" id="r-a" />');
+    $('#r-a').attr('rel', 'position: "inside"');
+    $('.cloud-zoom').CloudZoom();
+}
+
+// Remove zoom from the pictures
+function remove_zoom() {
+    var l = $('#l-image').clone();
+    var r = $('#r-image').clone();
+    $('#l-image-wrapper').children().first().remove();
+    $('#r-image-wrapper').children().first().remove();
+    $('#l-image-wrapper').prepend(l);
+    $('#r-image-wrapper').prepend(r);
+}
+
+// Generate a link such as /delete/127.0.0.1/abcdef.jpg
+function link(src, noun) {
+    var parts = src.split('/');
+    length = parts.length;
+    return '/' + noun + '/' + parts[length - 2] + '/' + parts[length - 1];
+}
+
+// Generate /download links
+function download_link(src) {
+    return link(src, 'download');
+}
+
+// Generate /delete links
+function delete_link(src) {
+    return link(src, 'delete');
+}
+
+/********************************************************************
+ * Set up jQuery plugins
+ *******************************************************************/
 
 // Set up the file upload button.
 $('#picture-upload').fileUploadUI({
@@ -74,18 +176,17 @@ $('#picture-upload').fileUploadUI({
 // Set up the file list carousel
 $('#picture-bar').jcarousel();
 
-// Store a handle to the jcrop API so we can later delete instances
-var jcrop_api;
+// Set up tipsy for appropriate elements
+$('.tip').tipsy();
 
-// Check if any pictures are in the picture bar and if not add the
-// no pictures message.
-function check_for_no_pictures() {
-    if($('.picture-thumb').length == 0) {
-        $('#picture-bar').append(
-            "<span id='no-pictures'>No pictures yet. Upload one!<\/span>"
-        );
-    }
-}
+// Make buttons out of buttons
+$('button').button();
+$('#zoom').button();
+
+
+/********************************************************************
+ * Bind event handlers
+ *******************************************************************/
 
 // Bind the delete icons to submit an AJAX deletion request, then fade out
 // and delete themselves from the picture bar. If the current image is
@@ -132,86 +233,6 @@ $('.picture-delete').live('click', function(e) {
     });
 });
 
-// Given a thumbnail source, set the display images and histos
-function set_display(src) {
-    src = src.slice(0, -6);
-    var src_h = src + ".h.png";
-    
-    if(jcrop_api !== undefined) {
-        jcrop_api.destroy();
-    }
-
-    if($('#zoom').attr('checked')) {
-        remove_zoom();
-        $('#zoom').attr('checked', false);
-        $('#zoom').button("refresh");
-    }
-
-    $('#l-image').attr('src', src);
-    $('#r-image').attr('src', src);
-
-    $('#l-image-h').attr('src', src_h);
-    $('#r-image-h').attr('src', src_h);
-
-}
-
-// Fetch the starting items, removing the "No pictures" note if appropriate
-function refresh_pictures() {
-    $.getJSON("/upload", function(data) {
-        $('#picture-bar').jcarousel('reset');
-        if(data.files.length > 0) {
-            $('#no-pictures').fadeOut(400, function(){$(this).remove();});
-            var options = $('#picture-upload').fileUploadUI('option');
-
-            $.each(data.files, function(index, file) {
-                element = options.buildDownloadRow(file)[0];
-                $('#picture-bar').jcarousel('add', index + 1, element);
-            });
-
-            $('#picture-bar').jcarousel('size', data.files.length);
-            $('.tip').tipsy();
-
-            set_display($('.picture-thumb').attr('src'));
-        } else {
-            check_for_no_pictures();
-        }
-    });
-}
-
-// Apply zoom to the pictures
-function apply_zoom() {
-    $('#l-image').wrap('<a href="' + $('#l-image').attr('src') +
-        '" class="cloud-zoom" id="l-a" />');
-    $('#l-a').attr('rel', 'position: "inside"');
-    $('#r-image').wrap('<a href="' + $('#r-image').attr('src') +
-        '" class="cloud-zoom" id="r-a" />');
-    $('#r-a').attr('rel', 'position: "inside"');
-    $('.cloud-zoom').CloudZoom();
-}
-
-// Remove zoom from the pictures
-function remove_zoom() {
-    var l = $('#l-image').clone();
-    var r = $('#r-image').clone();
-    $('#l-image-wrapper').children().first().remove();
-    $('#r-image-wrapper').children().first().remove();
-    $('#l-image-wrapper').prepend(l);
-    $('#r-image-wrapper').prepend(r);
-}
-
-function link(src, noun) {
-    var parts = src.split('/');
-    length = parts.length;
-    return '/' + noun + '/' + parts[length - 2] + '/' + parts[length - 1];
-}
-
-function download_link(src) {
-    return link(src, 'download');
-}
-
-function delete_link(src) {
-    return link(src, 'delete');
-}
 
 // Bind the reset link
 $('#reset-link').click(function(e) {
@@ -228,13 +249,6 @@ $('.picture-thumb').live('click', function() {
 $('#l-image').live('click', function() {
     //jcrop_api = $.Jcrop('#l-image', {boxWidth: 500, boxHeight: 500});
 });
-
-// Make buttons out of buttons
-$('button').button();
-$('#zoom').button();
-
-// Set up tipsy for appropriate elements
-$('.tip').tipsy();
 
 // Bind zoom button
 $('#zoom-label').click(function() {
@@ -261,6 +275,10 @@ $('#r2l').click(function() {
 $('#download').click(function() {
     location.href = download_link($('#r-image').attr('src'));
 });
+
+/********************************************************************
+ * Code to be executed at startup
+ *******************************************************************/
 
 // Get the first pictures
 refresh_pictures();
