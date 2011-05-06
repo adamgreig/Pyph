@@ -49,6 +49,7 @@ $('#picture-upload').fileUploadUI({
             c.add(i, node[0]);
             c.size(i);
             c.scroll(c.last + 1);
+            $('.tip').tipsy();
         }
         if(typeof callBack === 'function') {
             callBack();
@@ -62,6 +63,7 @@ $('#picture-upload').fileUploadUI({
             c.remove(i);
             c.add(i, newNode[0]);
             c.scroll(i);
+            $('.tip').tipsy();
         }
         if(typeof callBack === 'function') {
             callBack();
@@ -125,6 +127,7 @@ $('.picture-delete').live('click', function(e) {
         c.reset();
         pics.each(function(i,e){$('#picture-bar').jcarousel('add',i + 1,e);});
         $('#picture-bar').jcarousel('size', pics.length);
+        $('.tip').tipsy();
         check_for_no_pictures();
     });
 });
@@ -166,6 +169,7 @@ function refresh_pictures() {
             });
 
             $('#picture-bar').jcarousel('size', data.files.length);
+            $('.tip').tipsy();
 
             set_display($('.picture-thumb').attr('src'));
         } else {
