@@ -23,9 +23,9 @@ function set_display(src) {
     src = src.slice(0, -6);
     var src_h = src + ".h.png";
     
-    if(jcrop_api !== undefined) {
-        jcrop_api.destroy();
-    }
+    //if(jcrop_api !== undefined) {
+        //jcrop_api.destroy();
+    //}
 
     if($('#zoom').attr('checked')) {
         remove_zoom();
