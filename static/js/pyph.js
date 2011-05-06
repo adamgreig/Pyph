@@ -9,41 +9,68 @@ $('#picture-upload').fileUploadUI({
     cancelSelector: ".picture-upload-cancel",
     sequentialUploads: true,
     buildUploadRow: function(files, index, handler) {
-        return $('<div class="picture-thumb">' +
-            '<img src="\/static\/icons\/loading.gif" alt="..." \/>' +
-            '<img src="\/static\/icons\/cancel.png" alt="cancel"' +
-            ' class="picture-upload-cancel" \/>' +
-            '<\/div>');
+        // Returns an <li> suitable for inserting into the jCarousel,
+        //  containing a loading animation and a box with a cancel button.
+        return $('<li><span><a class="picture-upload-cancel tip" href="#"' +
+            ' title="Cancel Upload"><img src="\/static\/icons\/cancel.png"'+
+            ' alt="cancel" \/><\/a><\/span>' +
+            '<img src="\/static\/icons\/loading.gif" alt="..."\/><\/li>');
     },
     buildDownloadRow: function(file) {
+        // Returns an <li> suitable for inserting into the jCarousel,
+        //  containing the image plus a little box with save/delete icons.
         if(file !== undefined) {
-            return $('<div class="picture-thumb">' +
-                '<img src="' + file.url + '.t.jpg" \/>' +
-                '<a href="/delete/' + file.name + '" title="Delete"' +
-                ' class="picture-delete">' +
-                '<img src="\/static\/icons\/delete.png" alt="delete"\/>' +
-                '<\/a><\/div>');
+            return $('<li><span><a class="tip" title="Download" href="' +
+                download_link(file.url) + '"><img src="' +
+                '\/static\/icons\/disk.png" alt="Download" \/><\/a>' +
+                '<a class="picture-delete tip" title="Delete" href="' +
+                delete_link(file.url) + '"><img src="' +
+                '\/static\/icons\/bin_closed.png" alt="Delete" \/><\/a>' +
+                '<\/span><img class="picture-thumb" src="' + file.url +
+                '.t.jpg"\/><\/li>"');
         } else {
-            return $('<div class="picture-thumb">' +
-                '<img src="\/static\/icons\/error.png" alt="error"' +
-                ' title="Error uploading file. Click to hide."' +
-                ' class="picture-error" \/>' +
-                '<\/div>');
+            return;
         }
     },
     onError: function(event, files, index, xhr, handler) {
-        var newNode = $('<div class="picture-thumb">' +
-            '<img src="\/static\/icons\/error.png" alt="error"' +
-            ' title="Error uploading file. Click to hide."' +
-            ' class="picture-error" \/>' +
-            '<\/div>');
-        handler.replaceNode(handler.uploadRow, newNode);
+        alert("Error uploading file.");
     },
     beforeSend: function(event, files, index, xhr, handler, callBack) {
+        // Get rid of any "no-pictures" message
         $('#no-pictures').fadeOut(400, function(){$(this).remove();});
         callBack();
+    },
+    addNode: function(parentNode, node, callBack) {
+        // addNode overridden to call c.add() so the carousel updates properly
+        if(parentNode) {
+            var i = $('#picture-bar li').length + 1;
+            var c = $('#picture-bar').data('jcarousel');
+            console.log("adding a new node to index " + i);
+            c.add(i, node[0]);
+            c.size(i);
+            c.scroll(c.last + 1);
+        }
+        if(typeof callBack === 'function') {
+            callBack();
+        }
+    },
+    replaceNode: function(oldNode, newNode, callBack) {
+        // replaceNode also overridden so the carousel functions properly
+        if(oldNode && newNode) {
+            var c = $('#picture-bar').data('jcarousel');
+            i = oldNode.attr('jcarouselindex');
+            c.remove(i);
+            c.add(i, newNode[0]);
+            c.scroll(i);
+        }
+        if(typeof callBack === 'function') {
+            callBack();
+        }
     }
 });
+
+// Set up the file list carousel
+$('#picture-bar').jcarousel();
 
 // Store a handle to the jcrop API so we can later delete instances
 var jcrop_api;
@@ -58,28 +85,25 @@ function check_for_no_pictures() {
     }
 }
 
-// Bind the error icons to fade out and remove themselves when clicked.
-$('.picture-error').live('click', function() {
-    $(this).parent().fadeOut(400, function(){
-        $(this).remove();
-        check_for_no_pictures();
-    });
-});
-
 // Bind the delete icons to submit an AJAX deletion request, then fade out
 // and delete themselves from the picture bar. If the current image is
 // the one just deleted, reset to first image.
 $('.picture-delete').live('click', function(e) {
+    // Stop the link being clicked and prevent the picture beneath getting the
+    //  event.
     e.preventDefault();
     e.stopPropagation();
     
-    src = $(this).siblings().attr('src')
+    // Check what we're deleting to see if we need to swap out the display
+    //  images.
+    src = $(this).parent().siblings().attr('src')
     l_src = $('#l-image').attr('src');
     if(l_src == src.slice(0, -6)) {
-        new_src = $('#picture-bar').children().children().attr('src');
+        new_src = $('#picture-bar').children().children(':eq(1)').attr('src');
         if(new_src.slice(0, -6) == l_src) {
-            if($('#picture-bar').children().children().length > 2) {
-                new_src = $('#picture-bar').children().children()[2].src;
+            if($('#picture-bar').children().children().length > 3) {
+                new_src = $('#picture-bar').children().
+                    children(':eq(3)').attr('src');
             } else {
                 new_src = "/static/icons/picture.png.t.png";
             }
@@ -87,9 +111,20 @@ $('.picture-delete').live('click', function(e) {
         set_display(new_src);
     }
 
-    $.get($(this)[0].href);
-    $(this).parent().fadeOut(400, function(){
+    // Fire off the AJAX request
+    $.get($(this).attr('href'));
+    $(this).parent().parent().fadeOut(400, function(){
+        // Once faded out, remove from carousel and update it
+        // Updating the carousel involves detaching all images,
+        // resetting it, then readding all the images one by one
+        // to get the IDs sorted. eurgh!
+        var c = $('#picture-bar').data('jcarousel');
         $(this).remove();
+        var pics = $('#picture-bar li');
+        pics.detach();
+        c.reset();
+        pics.each(function(i,e){$('#picture-bar').jcarousel('add',i + 1,e);});
+        $('#picture-bar').jcarousel('size', pics.length);
         check_for_no_pictures();
     });
 });
@@ -120,17 +155,19 @@ function set_display(src) {
 // Fetch the starting items, removing the "No pictures" note if appropriate
 function refresh_pictures() {
     $.getJSON("/upload", function(data) {
-        $('#picture-bar').children().remove();
+        $('#picture-bar').jcarousel('reset');
         if(data.files.length > 0) {
             $('#no-pictures').fadeOut(400, function(){$(this).remove();});
             var options = $('#picture-upload').fileUploadUI('option');
 
             $.each(data.files, function(index, file) {
                 element = options.buildDownloadRow(file)[0];
-                $('#picture-bar').append(element);
+                $('#picture-bar').jcarousel('add', index + 1, element);
             });
 
-            set_display($('#picture-bar').children().children().attr('src'));
+            $('#picture-bar').jcarousel('size', data.files.length);
+
+            set_display($('.picture-thumb').attr('src'));
         } else {
             check_for_no_pictures();
         }
@@ -158,6 +195,20 @@ function remove_zoom() {
     $('#r-image-wrapper').prepend(r);
 }
 
+function link(src, noun) {
+    var parts = src.split('/');
+    length = parts.length;
+    return '/' + noun + '/' + parts[length - 2] + '/' + parts[length - 1];
+}
+
+function download_link(src) {
+    return link(src, 'download');
+}
+
+function delete_link(src) {
+    return link(src, 'delete');
+}
+
 // Bind the reset link
 $('#reset-link').click(function(e) {
     e.preventDefault();
@@ -166,7 +217,7 @@ $('#reset-link').click(function(e) {
 
 // Bind each photo to load them onto the display panes
 $('.picture-thumb').live('click', function() {
-    set_display($(this).children().attr('src'));
+    set_display($(this).attr('src'));
 });
 
 // Bind clicking on l-image to enable jCrop
@@ -204,9 +255,7 @@ $('#r2l').click(function() {
 
 // Bind "Download image to PC" button
 $('#download').click(function() {
-    var parts = $('#r-image').attr('src').split('/');
-    length = parts.length;
-    location.href = "/download/" + parts[length - 2] + "/" + parts[length - 1];
+    location.href = download_link($('#r-image').attr('src'));
 });
 
 // Get the first pictures

@@ -1,25 +1,12 @@
-.jcarousel-skin-pyph .jcarousel-container {
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-   border-radius: 10px;
-    background: #F0F6F9;
-    /*border: 1px solid #346F97;*/
-    border: 1px solid #ffbf00;
-}
-
-.jcarousel-skin-pyph .jcarousel-direction-rtl {
-	direction: rtl;
-}
+/**
+ * Modified from jcarousel-skin-tango for Pyph.
+ *
+ * General layout
+ */
 
 .jcarousel-skin-pyph .jcarousel-container-horizontal {
-    width: 245px;
-    padding: 20px 40px;
-}
-
-.jcarousel-skin-pyph .jcarousel-container-vertical {
-    width: 75px;
-    height: 245px;
-    padding: 40px 20px;
+    width: 250px;
+    padding: 10px 40px;
 }
 
 .jcarousel-skin-pyph .jcarousel-clip {
@@ -27,32 +14,23 @@
 }
 
 .jcarousel-skin-pyph .jcarousel-clip-horizontal {
-    width:  245px;
-    height: 75px;
-}
-
-.jcarousel-skin-pyph .jcarousel-clip-vertical {
-    width:  75px;
-    height: 245px;
+    width:  250px;
+    height: 70px;
 }
 
 .jcarousel-skin-pyph .jcarousel-item {
     width: 75px;
-    height: 75px;
+    height: 70px;
 }
 
 .jcarousel-skin-pyph .jcarousel-item-horizontal {
-	margin-left: 0;
+    margin-left: 0;
     margin-right: 10px;
 }
 
 .jcarousel-skin-pyph .jcarousel-direction-rtl .jcarousel-item-horizontal {
-	margin-left: 10px;
+    margin-left: 10px;
     margin-right: 0;
-}
-
-.jcarousel-skin-pyph .jcarousel-item-vertical {
-    margin-bottom: 10px;
 }
 
 .jcarousel-skin-pyph .jcarousel-item-placeholder {
@@ -63,9 +41,10 @@
 /**
  *  Horizontal Buttons
  */
+
 .jcarousel-skin-pyph .jcarousel-next-horizontal {
     position: absolute;
-    top: 43px;
+    top: 29px;
     right: 5px;
     width: 32px;
     height: 32px;
@@ -98,7 +77,7 @@
 
 .jcarousel-skin-pyph .jcarousel-prev-horizontal {
     position: absolute;
-    top: 43px;
+    top: 29px;
     left: 5px;
     width: 32px;
     height: 32px;
@@ -129,59 +108,3 @@
     background-position: -96px 0;
 }
 
-/**
- *  Vertical Buttons
- */
-.jcarousel-skin-pyph .jcarousel-next-vertical {
-    position: absolute;
-    bottom: 5px;
-    left: 43px;
-    width: 32px;
-    height: 32px;
-    cursor: pointer;
-    background: transparent url(next.png) no-repeat 0 0;
-}
-
-.jcarousel-skin-pyph .jcarousel-next-vertical:hover,
-.jcarousel-skin-pyph .jcarousel-next-vertical:focus {
-    background-position: 0 -32px;
-}
-
-.jcarousel-skin-pyph .jcarousel-next-vertical:active {
-    background-position: 0 -64px;
-}
-
-.jcarousel-skin-pyph .jcarousel-next-disabled-vertical,
-.jcarousel-skin-pyph .jcarousel-next-disabled-vertical:hover,
-.jcarousel-skin-pyph .jcarousel-next-disabled-vertical:focus,
-.jcarousel-skin-pyph .jcarousel-next-disabled-vertical:active {
-    cursor: default;
-    background-position: 0 -96px;
-}
-
-.jcarousel-skin-pyph .jcarousel-prev-vertical {
-    position: absolute;
-    top: 5px;
-    left: 43px;
-    width: 32px;
-    height: 32px;
-    cursor: pointer;
-    background: transparent url(prev.png) no-repeat 0 0;
-}
-
-.jcarousel-skin-pyph .jcarousel-prev-vertical:hover,
-.jcarousel-skin-pyph .jcarousel-prev-vertical:focus {
-    background-position: 0 -32px;
-}
-
-.jcarousel-skin-pyph .jcarousel-prev-vertical:active {
-    background-position: 0 -64px;
-}
-
-.jcarousel-skin-pyph .jcarousel-prev-disabled-vertical,
-.jcarousel-skin-pyph .jcarousel-prev-disabled-vertical:hover,
-.jcarousel-skin-pyph .jcarousel-prev-disabled-vertical:focus,
-.jcarousel-skin-pyph .jcarousel-prev-disabled-vertical:active {
-    cursor: default;
-    background-position: 0 -96px;
-}

@@ -1,3 +1,222 @@
-{% extends "layout.html" %}
-{% block picture_bar %}
-{% endblock %}
+<!doctype html>
+<title>Pyph</title>
+
+<!-- css -->
+<link type="text/css" rel="stylesheet" 
+    href="http://fonts.googleapis.com/css?family=Smythe" />
+<link type="text/css" rel="stylesheet" id="theme"
+    href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/themes/sunny/jquery-ui.css" />
+<link type="text/css" rel="stylesheet"
+    href="{{ url_for('static', filename='css/jquery.Jcrop.css') }}" />
+<link type="text/css" rel="stylesheet"
+    href="{{ url_for('static', filename='css/tipsy.css') }}" />
+<link type="text/css" rel="stylesheet"
+    href="{{ url_for('static', filename='css/cloud-zoom.css') }}" />
+<link type="text/css" rel="stylesheet"
+    href="{{ url_for('static', filename='css/jquery.fileupload-ui.css') }}" />
+<link type="text/css" rel="stylesheet"
+    href="{{ url_for('static', filename='css/jquery.jcarousel.css') }}" />
+<link type="text/css" rel="stylesheet/less"
+    href="{{ url_for('static', filename='css/style.less') }}" />
+
+
+<!-- header with image select/upload -->
+<h1 class="tip" title="rocks!">Pyph</h1> 
+<div id="picture-bar-wrapper">
+    <ul id="picture-bar" class="jcarousel-skin-pyph">
+    </ul>
+    <form id="picture-upload" action="/upload" method="POST"
+        enctype="multipart/form-data" class="tip" title="upload image">
+        <input type="file" name="file" multiple />
+        <button type="submit">Upload</button>
+        <img src="{{ url_for('static', filename='icons/add.png') }}"
+            alt="upload" title="Upload Images" />
+    </form>
+</div>
+<div class="clear"></div>
+
+<!-- image display -->
+<section id="display-wrapper">
+    <div id="l-image-wrapper" class="image-wrapper">
+        <img id="l-image" class="image" src="/static/icons/picture.png" />
+        <div id="l-image-h-wrapper" class="image-h-wrapper">
+            <img id="l-image-h" src="/static/icons/picture.png" />
+        </div>
+    </div>
+    <div id="r-image-wrapper" class="image-wrapper">
+        <img id="r-image" class="image" src="/static/icons/picture.png" />
+        <div id="r-image-h-wrapper" class="image-h-wrapper">
+            <img id="r-image-h" src="/static/icons/picture.png" />
+        </div>
+    </div>
+    <div class="clear"></div>
+</section>
+<div class="clear"></div>
+
+<!-- tool select -->
+<section id="toolbox-wrapper">
+    <input id="zoom" type="checkbox" />
+    <label for="zoom" class="tool tip" title="toggle zoom" id="zoom-label">
+        <img src="/static/icons/zoom.png" alt="zoom" />
+    </label>
+    <button id="l2r" class="tool tip" title="copy left image to right image">
+        <img src="/static/icons/picture.png" alt="l" />
+        <img src="/static/icons/arrow_right.png" alt="->" />
+        <img src="/static/icons/picture.png" alt="r" />
+    </button>
+    <button id="r2l" class="tool tip" title="copy right image to left image">
+        <img src="/static/icons/picture.png" alt="l" />
+        <img src="/static/icons/arrow_left.png" alt="<-" />
+        <img src="/static/icons/picture.png" alt="r" />
+    </button>
+    <button id="save" class="tool tip" title="save right image to session">
+        <img src="/static/icons/disk.png" alt="save" />
+    </button>
+    <button id="download" class="tool tip" title="download right image to PC">
+        <img src="/static/icons/drive_disk.png" alt="download" />
+    </button>
+    <button id="crop" class="tool tip" title="crop">
+        <img src="/static/icons/cut.png" alt="crop" />
+    </button>
+    <button id="resize" class="tool tip" title="resize">
+        <img src="/static/icons/arrow_out.png" alt="resize" />
+    </button>
+    <button id="rotate" class="tool tip" title="rotate">
+        <img src="/static/icons/arrow_rotate_anticlockwise.png" alt="rotate" />
+    </button>
+    <button id="morph" class="tool tip" title="morph">
+        <img src="/static/icons/lightning.png" alt="morph" />
+    </button>
+    <button id="colour_shift" class="tool tip" title="colour shift">
+        <img src="/static/icons/color_wheel.png" alt="colour shift" />
+    </button>
+    <button id="lighting_shift" class="tool tip" title="lighting shift">
+        <img src="/static/icons/contrast.png" alt="lighting shift" />
+    </button>
+    <button id="add_noise" class="tool tip" title="add noise">
+        <img src="/static/icons/sound.png" alt="add noise" />
+    </button>
+    <button id="filter" class="tool tip" title="filter">
+        <img src="/static/icons/layers.png" alt="filter" />
+    </button>
+    <button id="enhance" class="tool tip" title="enhance">
+        <img src="/static/icons/rosette.png" alt="enhance" />
+    </button>
+</section>
+
+<!-- footer -->
+<footer>
+
+<p>
+    Written by
+    <a href="http://adamgreig.com" title="Adam Greig's homepage">
+        Adam Greig
+    </a>, released under the
+    <a href="http://www.opensource.org/licenses/bsd-license"
+        title="BSD License">
+        simplified BSD license
+    </a>. Source on
+    <a href="https://github.com/adamgreig/Pyph" title="source on github">
+        GitHub
+    </a>.
+</p>
+
+<p>
+    Website uses 
+    <a href="http://jquery.com" title="jQuery homepage">
+        jQuery
+    </a>,
+    <a href="http://jqueryui.com" title="jQuery UI homepage">
+        jQuery UI
+    </a>,
+    <a href="http://deepliquid.com/content/Jcrop.html"
+        title="jCrop plugin">
+        jCrop
+    </a>,
+    <a href="http://aquantum-demo.appspot.com/file-upload"
+        title="jQuery-File-Upload plugin homepage">
+        jQuery File Upload
+    </a>,
+    <a href="http://onehackoranother.com/projects/jquery/tipsy/"
+        title="tipsy jquery plugin">
+        tipsy
+    </a>,
+    <a href="http://sorgalla.com/projects/jcarousel/" title="jCarousel">
+        jCarousel
+    </a>, 
+    <a href="http://www.professorcloud.com/mainsite/cloud-zoom.htm"
+        title="cloud zoom javascript">
+        cloud zoom
+    </a>,
+    <a href="http://www.google.com/webfonts/family?family=Smythe&subset=latin">
+        Smythe font
+    </a>,
+    <a href="http://lesscss.org/" title="LessCSS">
+        LessCSS
+    </a> and
+    <a href="http://www.famfamfam.com/lab/icons/silk/"
+        title="Silk icons on FamFamFam">
+    Silk icons
+    </a>. Designed for
+    <a href="http://www.google.com/chrome" title="Google Chrome">
+        Google Chrome
+    </a>, may work elsewhere.<br />
+    Backend uses
+    <a href="http://flask.pocoo.org" title="Flask Python microframework">
+        Flask
+    </a> with
+    <a href="http://packages.python.org/Flask-Uploads/"
+        title="Flask-Uploads extension">
+        Flask-Uploads
+    </a>,
+    <a href="http://www.pythonware.com/products/pil/" title="PIL">
+        PIL
+    </a>,
+    <a href="http://numpy.scipy.org/" title="numpy">
+        NumPy
+    </a> and
+    <a href="http://matplotlib.sourceforge.net/" title="matplotlib">
+        matplotlib
+    </a> on
+    <a href="http://python.org" title="Python homepage">
+        Python
+    </a>.
+</p>
+<p>
+    <a href="/reset" title="reset everything" id="reset-link">
+        Click to reset your session
+    </a>. All uploaded files will be removed.
+</p>
+</footer>
+
+<!-- scripts -->
+<script
+    src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.js">
+</script>
+<script
+    src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.js">
+</script>
+<script
+    src="{{ url_for('static', filename='js/jquery.Jcrop.min.js') }}">
+</script>
+<script
+    src="{{ url_for('static', filename='js/jquery.fileupload.min.js') }}">
+</script>
+<script
+    src="{{ url_for('static', filename='js/jquery.fileupload-ui.min.js') }}">
+</script>
+<script
+    src="{{ url_for('static', filename='js/jquery.tipsy.min.js') }}">
+</script>
+<script
+    src="{{ url_for('static', filename='js/less-1.0.41.min.js') }}">
+</script>
+<script
+    src="{{ url_for('static', filename='js/cloud-zoom.1.0.2.min.js') }}">
+</script>
+<script
+    src="{{ url_for('static', filename='js/jquery.jcarousel.min.js') }}">
+</script>
+<script
+    src="{{ url_for('static', filename='js/pyph.js') }}">
+</script>

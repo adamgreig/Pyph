@@ -16,21 +16,34 @@ footer {
     top: 10px;
     right: 10px;
     padding: 10px;
-    width: 400px;
-    height: 100px;
+    width: 380px;
+    height: 93px;
 }
 
 #picture-bar {
     position: absolute;
     left: 10px;
     padding: 3px;
-    width: 350px;
-    height: 90px;
+}
+
+#picture-bar li {
+    height: 100%;
+    position: relative;
+    span {
+        display: none;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        padding: 2px;
+    }
+    &:hover span {
+        display: inline;
+    }
 }
 
 #picture-upload {
     position: absolute;
-    top: 34px;
+    top: 30px;
     right: 10px;
     padding: 5px;
     width: 20px;
@@ -39,6 +52,7 @@ footer {
 
 #display-wrapper {
     float: left;
+    margin-top: 10px;
 }
 
 .image-wrapper {
@@ -86,15 +100,32 @@ a img {
     border: 0;
 }
 
-#picture-bar-wrapper, #picture-bar, #picture-upload, #display-wrapper,
-  #toolbox-wrapper, .image-wrapper {
+#picture-bar-wrapper, #picture-upload, #display-wrapper, #toolbox-wrapper {
     .rounded-corners;
 }
 
 .image-wrapper {
+    .rounded-corners;
     overflow: hide;
 }
 
+.jcarousel-skin-pyph {
+    .jcarousel-container {
+        .rounded-corners;
+    }
+}
+
+#picture-bar li {
+    img {
+        cursor: pointer;
+    }
+    span {
+        .rounded-corners(3px);
+        a:hover img {
+            opacity: 0.5;
+        }
+    }
+}
 
 /**********************************************************
  * Colours
@@ -111,8 +142,12 @@ body, #picture-bar, #picture-upload {
     background-color: @fgorange;
 }
 
-.image-wrapper {
-    background-color: white;
+.jcarousel-skin-pyph .jcarousel-container {
+    background-color: @bgblue;
+}
+
+#picture-bar li span {
+    background-color: @fgorange;
 }
 
 
