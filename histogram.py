@@ -23,4 +23,3 @@ def gen_histogram(infile, outfile):
     ax.set_yticks([])
     c = FigureCanvasAgg(f)
     c.print_png(outfile)
-    return

@@ -13,4 +13,3 @@ def do_crop(infile, outfile, c):
     a = a[int(c['y']):int(c['y2']), int(c['x']):int(c['x2'])]
     im = Image.fromarray(a)
     im.save(outfile)
-    pass

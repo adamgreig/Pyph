@@ -12,10 +12,13 @@ from flask import send_file
 from flaskext import uploads
 
 from histogram import gen_histogram
+from thumbnail import gen_thumbnail
 from crop import do_crop
 
 app = Flask(__name__)
 app.config.from_object("config")
+if app.config['UPLOADED_FILES_DEST'][-1] != '/':
+    app.config['UPLOADED_FILES_DEST'] += '/'
 
 photos = uploads.UploadSet('files', uploads.IMAGES)
 uploads.configure_uploads(app, photos)
@@ -30,16 +33,33 @@ def setup_session():
 
 def path_from_filename(filename):
     if '..' not in filename:
-        return app.config['UPLOADED_FILES_DEST'] + '/' + filename
+        return app.config['UPLOADED_FILES_DEST'] + filename
     else:
         return False
 
 def temp_file_path(ip, ext):
     name = uuid.uuid4().hex + ext
-    return app.config['UPLOADED_FILES_DEST'] + '/' + ip + '/' + name
+    path = app.config['UPLOADED_FILES_DEST'] + ip + '/tmp-'
+    return path + name
 
-def url_from_path(path):
+def url_from_temp_path(path):
     return photos.url('/'.join(path.split('/')[-2:]))
+
+def operate(func, filename):
+    """
+    Given an image editing function and filename, perform the operation,
+    generate required histograms and thumbnails, then return the new
+    image's URL.
+    """
+    path = path_from_filename(filename)
+    if(os.path.exists(path)):
+        ip = request.environ["REMOTE_ADDR"]
+        ext = os.path.splitext(path)[1]
+        tmp = temp_file_path(request.environ["REMOTE_ADDR"], ext)
+        func(path, tmp, request.form)
+        gen_histogram(tmp, tmp+".h.png")
+        gen_thumbnail(tmp, tmp+".t.jpg")
+        return jsonify({'url': url_from_temp_path(tmp)})
 
 @app.before_request
 def pre_check():
@@ -63,9 +83,7 @@ def upload():
         name += os.path.splitext(request.files['file'].filename)[1]
         filename = photos.save(request.files['file'], folder=ip, name=name)
         path = photos.path(filename)
-        image = Image.open(path)
-        image.thumbnail((64,64))
-        image.save(path + ".t.jpg")
+        gen_thumbnail(path, path+".t.jpg")
         gen_histogram(path, path+".h.png")
         photo = {"name": filename, "url": photos.url(filename)}
         session['files'].append(photo)
@@ -87,7 +105,7 @@ def save(filename):
         ip = request.environ['REMOTE_ADDR']
         name = uuid.uuid4().hex
         name += os.path.splitext(path)[1]
-        dst = app.config['UPLOADED_FILES_DEST'] + '/' + ip + '/' + name
+        dst = app.config['UPLOADED_FILES_DEST'] + ip + '/' + name
         shutil.copy(path, os.path.abspath(dst))
         shutil.copy(path+'.t.jpg', os.path.abspath(dst+'.t.jpg'))
         shutil.copy(path+'.h.png', os.path.abspath(dst+'.h.png'))
@@ -155,14 +173,7 @@ def reset():
 
 @app.route("/crop/<path:filename>", methods=['POST'])
 def crop(filename):
-    path = path_from_filename(filename)
-    if(os.path.exists(path)):
-        ip = request.environ["REMOTE_ADDR"]
-        ext = os.path.splitext(path)[1]
-        tmp = temp_file_path(request.environ["REMOTE_ADDR"], ext)
-        do_crop(path, tmp, request.form)
-        gen_histogram(tmp, tmp+".h.png")
-        return jsonify({'url': url_from_path(tmp)})
+    return operate(do_crop, filename)
 
 if __name__ == "__main__":
     app.debug = True
