@@ -24,6 +24,7 @@ photos = uploads.UploadSet('files', uploads.IMAGES)
 uploads.configure_uploads(app, photos)
 
 def setup_session():
+    """Add all the images in the stock folder to a new session."""
     session['files'] = []
     for filename in os.listdir("images/stock/"):
         if filename[-5:] != "t.jpg" and filename[-5:] != "h.png":
@@ -32,18 +33,25 @@ def setup_session():
             session.modified = True
 
 def path_from_filename(filename):
+    """Go from a submitted filename to a path on disk."""
     if '..' not in filename:
         return app.config['UPLOADED_FILES_DEST'] + filename
     else:
         return False
 
 def temp_file_path(ip, ext):
+    """Generate a temporary file path."""
     name = uuid.uuid4().hex + ext
     path = app.config['UPLOADED_FILES_DEST'] + ip + '/tmp-'
     return path + name
 
-def url_from_temp_path(path):
+def url_from_path(path):
+    """Turn a file path into a URL."""
     return photos.url('/'.join(path.split('/')[-2:]))
+
+def remove_temp_files(ip):
+    """Remove tmp-* files from a given IP."""
+    pass
 
 def operate(func, filename):
     """
@@ -54,12 +62,15 @@ def operate(func, filename):
     path = path_from_filename(filename)
     if(os.path.exists(path)):
         ip = request.environ["REMOTE_ADDR"]
+        remove_temp_files(ip)
         ext = os.path.splitext(path)[1]
         tmp = temp_file_path(request.environ["REMOTE_ADDR"], ext)
         func(path, tmp, request.form)
         gen_histogram(tmp, tmp+".h.png")
         gen_thumbnail(tmp, tmp+".t.jpg")
-        return jsonify({'url': url_from_temp_path(tmp)})
+        return jsonify({'url': url_from_path(tmp)})
+    else:
+        abort(400)
 
 @app.before_request
 def pre_check():
