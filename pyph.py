@@ -59,6 +59,14 @@ def upload():
     else:
         abort(400)
 
+@app.route("/download/<path:filename>")
+def download(filename):
+    return send_file(photos.path(filename), as_attachment=True)
+
+@app.route("/save/<path:filename>")
+def save(filename):
+    pass
+
 @app.route("/delete/<path:filename>")
 def delete(filename):
     """Delete an uploaded photo from the session and filesystem."""
@@ -100,10 +108,6 @@ def delete(filename):
         os.remove(path+".h.png")
 
     return "OK"
-
-@app.route("/download/<path:filename>")
-def download(filename):
-    return send_file(photos.path(filename), as_attachment=True)
 
 @app.route("/reset")
 def reset():

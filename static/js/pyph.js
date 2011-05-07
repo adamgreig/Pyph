@@ -18,6 +18,17 @@ function check_for_no_pictures() {
     }
 }
 
+// Bind useful things to just-made pictures in the carousel
+function bind_thumbs() {
+    $('.tip').tipsy();
+    $('.picture-thumb').draggable({
+        revert: true,
+        helper: 'clone',
+        appendTo: 'body',
+        containment: 'window'
+    });
+}
+
 // Given a thumbnail source, set the display images and histos
 function set_display(src) {
     src = src.slice(0, -6);
@@ -54,7 +65,7 @@ function refresh_pictures() {
             });
 
             $('#picture-bar').jcarousel('size', data.files.length);
-            $('.tip').tipsy();
+            bind_thumbs();
 
             set_display($('.picture-thumb').attr('src'));
         } else {
@@ -151,7 +162,7 @@ $('#picture-upload').fileUploadUI({
             c.add(i, node[0]);
             c.size(i);
             c.scroll(c.last + 1);
-            $('.tip').tipsy();
+            bind_thumbs();
         }
         if(typeof callBack === 'function') {
             callBack();
@@ -165,7 +176,7 @@ $('#picture-upload').fileUploadUI({
             c.remove(i);
             c.add(i, newNode[0]);
             c.scroll(i);
-            $('.tip').tipsy();
+            bind_thumbs();
         }
         if(typeof callBack === 'function') {
             callBack();
@@ -183,6 +194,32 @@ $('.tip').tipsy();
 $('button').button();
 $('#zoom').button();
 
+// Make pictures draggable
+$('.image').draggable({revert: true, helper: 'clone'});
+
+// ...and droppable
+$('.image').droppable({
+    tolerance: 'touch',
+    activate: function(e, ui) {
+        $(this).css('opacity', '.8');
+    },
+    deactivate: function(e, ui) {
+        $(this).css('opacity', '1');
+    },
+    drop: function(e, ui) {
+        var src = ui.draggable.attr('src');
+        if(src.slice(-6) == '.t.jpg') {
+            // A thumbnail got dropped, handle it appropriately
+            $(this).attr('src', src.slice(0, -6));
+            var h_src = src.slice(0, -6) + '.h.png';
+            $(this).siblings().children().attr('src', h_src);
+        } else {
+            // It was an actual image
+            $(this).attr('src', src);
+            $(this).siblings().children().attr('src', src+'.h.png');
+        }
+    },
+});
 
 /********************************************************************
  * Bind event handlers
@@ -228,7 +265,7 @@ $('.picture-delete').live('click', function(e) {
         c.reset();
         pics.each(function(i,e){$('#picture-bar').jcarousel('add',i + 1,e);});
         $('#picture-bar').jcarousel('size', pics.length);
-        $('.tip').tipsy();
+        bind_thumbs();
         check_for_no_pictures();
     });
 });
