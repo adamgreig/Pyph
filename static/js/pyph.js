@@ -195,7 +195,7 @@ $('button').button();
 $('#zoom').button();
 
 // Make pictures draggable
-$('.image').draggable({revert: true, helper: 'clone'});
+$('.image').draggable({revert: 'invalid', helper: 'clone'});
 
 // ...and droppable
 $('.image').droppable({
