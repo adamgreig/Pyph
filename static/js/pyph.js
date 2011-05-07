@@ -199,7 +199,7 @@ $('.image').draggable({revert: true, helper: 'clone'});
 
 // ...and droppable
 $('.image').droppable({
-    tolerance: 'touch',
+    tolerance: 'pointer',
     activate: function(e, ui) {
         $(this).css('opacity', '.8');
     },
