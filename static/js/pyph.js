@@ -60,7 +60,7 @@ function refresh_pictures() {
             $('#no-pictures').fadeOut(400, function(){$(this).remove();});
             var options = $('#picture-upload').fileUploadUI('option');
             $.each(data.files, function(index, file) {
-                element = options.buildDownloadRow(file)[0];
+                var element = options.buildDownloadRow(file)[0];
                 $('#picture-bar').jcarousel('add', index + 1, element);
             });
 
@@ -102,16 +102,6 @@ function link(src, noun) {
     return '/' + noun + '/' + parts[length - 2] + '/' + parts[length - 1];
 }
 
-// Generate /download links
-function download_link(src) {
-    return link(src, 'download');
-}
-
-// Generate /delete links
-function delete_link(src) {
-    return link(src, 'delete');
-}
-
 /********************************************************************
  * Set up jQuery plugins
  *******************************************************************/
@@ -134,10 +124,10 @@ $('#picture-upload').fileUploadUI({
         //  containing the image plus a little box with save/delete icons.
         if(file !== undefined) {
             return $('<li><span><a class="tip" title="Download" href="' +
-                download_link(file.url) + '"><img src="' +
+                link(file.url, 'download') + '"><img src="' +
                 '\/static\/icons\/disk.png" alt="Download" \/><\/a>' +
                 '<a class="picture-delete tip" title="Delete" href="' +
-                delete_link(file.url) + '"><img src="' +
+                link(file.url, 'delete') + '"><img src="' +
                 '\/static\/icons\/bin_closed.png" alt="Delete" \/><\/a>' +
                 '<\/span><img class="picture-thumb" src="' + file.url +
                 '.t.jpg"\/><\/li>"');
@@ -158,10 +148,9 @@ $('#picture-upload').fileUploadUI({
         if(parentNode) {
             var i = $('#picture-bar li').length + 1;
             var c = $('#picture-bar').data('jcarousel');
-            console.log("adding a new node to index " + i);
             c.add(i, node[0]);
             c.size(i);
-            c.scroll(c.last + 1);
+            c.scroll(i);
             bind_thumbs();
         }
         if(typeof callBack === 'function') {
@@ -317,9 +306,25 @@ $('#r2l').click(function() {
     $('#l-image-h').attr('src', $('#r-image-h').attr('src'));
 });
 
+// Bind "Save image to session" button
+$('#save').click(function() {
+    $.getJSON(link($('#r-image').attr('src'), 'save'), function(data) {
+        if(data.url) {
+            var options = $('#picture-upload').fileUploadUI('option');
+            var element = options.buildDownloadRow(data)[0];
+            var c = $('#picture-bar').data('jcarousel');
+            var i = $('#picture-bar li').length + 1;
+            c.add(i, element);
+            c.size(i);
+            c.scroll(i);
+            bind_thumbs();
+        }
+    });
+});
+
 // Bind "Download image to PC" button
 $('#download').click(function() {
-    location.href = download_link($('#r-image').attr('src'));
+    location.href = link($('#r-image').attr('src'), 'download');
 });
 
 // Bind "Help?" link

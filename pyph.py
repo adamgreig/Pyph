@@ -5,6 +5,7 @@
 
 import Image
 import os
+import shutil
 import uuid
 from flask import Flask, render_template, request, jsonify, abort, session
 from flask import send_file
@@ -43,7 +44,7 @@ def upload():
     if request.method == 'GET':
         return jsonify(files=session['files'])
     elif request.method == 'POST' and 'file' in request.files:
-        ip = request.environ["REMOTE_ADDR"]
+        ip = request.environ['REMOTE_ADDR']
         name = uuid.uuid4().hex
         name += os.path.splitext(request.files['file'].filename)[1]
         filename = photos.save(request.files['file'], folder=ip, name=name)
@@ -65,7 +66,24 @@ def download(filename):
 
 @app.route("/save/<path:filename>")
 def save(filename):
-    pass
+    """Save an existing file into the session"""
+    path = os.path.abspath(app.config['UPLOADED_FILES_DEST'] + '/' + filename)
+    e = os.path.exists
+    if e(path) and e(path+'.t.jpg') and e(path+'.h.png'):
+        ip = request.environ['REMOTE_ADDR']
+        name = uuid.uuid4().hex
+        name += os.path.splitext(path)[1]
+        dst = app.config['UPLOADED_FILES_DEST'] + '/' + ip + '/' + name
+        shutil.copy(path, os.path.abspath(dst))
+        shutil.copy(path+'.t.jpg', os.path.abspath(dst+'.t.jpg'))
+        shutil.copy(path+'.h.png', os.path.abspath(dst+'.h.png'))
+        filename = ip + '/' + name
+        photo = {"name": filename, "url": photos.url(filename)}
+        session['files'].append(photo)
+        session.modified = True
+        return jsonify(photo)
+    else:
+        abort(400)
 
 @app.route("/delete/<path:filename>")
 def delete(filename):
