@@ -38,15 +38,19 @@
 <!-- image display -->
 <section id="display-wrapper">
     <div id="l-image-wrapper" class="image-wrapper">
-        <img id="l-image" class="image" src="/static/icons/picture.png" />
+        <img id="l-image" class="image"
+            src="{{ url_for('static', filename='icons/picture.png') }}" />
         <div id="l-image-h-wrapper" class="image-h-wrapper">
-            <img id="l-image-h" src="/static/icons/picture.png" />
+            <img id="l-image-h"
+                src="{{ url_for('static', filename='icons/picture.png') }}" />
         </div>
     </div>
     <div id="r-image-wrapper" class="image-wrapper">
-        <img id="r-image" class="image" src="/static/icons/picture.png" />
+        <img id="r-image" class="image"
+            src="{{ url_for('static', filename='icons/picture.png') }}" />
         <div id="r-image-h-wrapper" class="image-h-wrapper">
-            <img id="r-image-h" src="/static/icons/picture.png" />
+            <img id="r-image-h"
+                src="{{ url_for('static', filename='icons/picture.png') }}" />
         </div>
     </div>
     <div class="clear"></div>
@@ -57,50 +61,69 @@
 <section id="toolbox-wrapper">
     <input id="zoom" type="checkbox" />
     <label for="zoom" class="tool tip" title="toggle zoom" id="zoom-label">
-        <img src="/static/icons/zoom.png" alt="zoom" />
+        <img src="{{ url_for('static', filename='icons/zoom.png') }}"
+            alt="zoom" />
     </label>
     <button id="l2r" class="tool tip" title="copy left image to right image">
-        <img src="/static/icons/picture.png" alt="l" />
-        <img src="/static/icons/arrow_right.png" alt="->" />
-        <img src="/static/icons/picture.png" alt="r" />
+        <img src="{{ url_for('static', filename='icons/picture.png') }}" 
+            alt="l" />
+        <img src="{{ url_for('static', filename='icons/arrow_right.png') }}"
+                alt="->" />
+        <img src="{{ url_for('static', filename='icons/picture.png') }}"
+            alt="r" />
     </button>
     <button id="r2l" class="tool tip" title="copy right image to left image">
-        <img src="/static/icons/picture.png" alt="l" />
-        <img src="/static/icons/arrow_left.png" alt="<-" />
-        <img src="/static/icons/picture.png" alt="r" />
+        <img src="{{ url_for('static', filename='icons/picture.png') }}"
+            alt="l" />
+        <img src="{{ url_for('static', filename='icons/arrow_left.png') }}"
+            alt="<-" />
+        <img src="{{ url_for('static', filename='icons/picture.png') }}"
+            alt="r" />
     </button>
     <button id="save" class="tool tip" title="save right image to session">
-        <img src="/static/icons/disk.png" alt="save" />
+        <img src="{{ url_for('static', filename='icons/disk.png') }}"
+            alt="save" />
     </button>
     <button id="download" class="tool tip" title="download right image to PC">
-        <img src="/static/icons/drive_disk.png" alt="download" />
+        <img src="{{ url_for('static', filename='icons/drive_disk.png') }}"
+            alt="download" />
     </button>
     <button id="crop" class="tool tip" title="crop">
-        <img src="/static/icons/cut.png" alt="crop" />
+        <img src="{{ url_for('static', filename='icons/cut.png') }}"
+            alt="crop" />
     </button>
     <button id="resize" class="tool tip" title="resize">
-        <img src="/static/icons/arrow_out.png" alt="resize" />
+        <img src="{{ url_for('static', filename='icons/arrow_out.png') }}"
+            alt="resize" />
     </button>
     <button id="rotate" class="tool tip" title="rotate">
-        <img src="/static/icons/arrow_rotate_anticlockwise.png" alt="rotate" />
+        <img 
+src="{{ url_for('static', filename='icons/arrow_rotate_anticlockwise.png') }}"
+        alt="rotate" />
     </button>
     <button id="morph" class="tool tip" title="morph">
-        <img src="/static/icons/lightning.png" alt="morph" />
+        <img src="{{ url_for('static', filename='icons/lightning.png') }}"
+            alt="morph" />
     </button>
     <button id="colour_shift" class="tool tip" title="colour shift">
-        <img src="/static/icons/color_wheel.png" alt="colour shift" />
+        <img src="{{ url_for('static', filename='icons/color_wheel.png') }}"
+            alt="colour shift" />
     </button>
     <button id="lighting_shift" class="tool tip" title="lighting shift">
-        <img src="/static/icons/contrast.png" alt="lighting shift" />
+        <img src="{{ url_for('static', filename='icons/contrast.png') }}"
+            alt="lighting shift" />
     </button>
     <button id="add_noise" class="tool tip" title="add noise">
-        <img src="/static/icons/sound.png" alt="add noise" />
+        <img src="{{ url_for('static', filename='icons/sound.png') }}"
+            alt="add noise" />
     </button>
     <button id="filter" class="tool tip" title="filter">
-        <img src="/static/icons/layers.png" alt="filter" />
+        <img src="{{ url_for('static', filename='icons/layers.png') }}"
+            alt="filter" />
     </button>
     <button id="enhance" class="tool tip" title="enhance">
-        <img src="/static/icons/rosette.png" alt="enhance" />
+        <img src="{{ url_for('static', filename='icons/rosette.png') }}"
+            alt="enhance" />
     </button>
 </section>
 
@@ -118,8 +141,36 @@
     </a>. Source on
     <a href="https://github.com/adamgreig/Pyph" title="source on github">
         GitHub
-    </a>.
+    </a>. <a href="#" id="show_help">Help?</a>
 </p>
+
+<section id="help">
+<h2>Uploading Pictures</h2>
+<p>Click the <img src="{{ url_for('static', filename='icons/add.png') }}"
+alt="upload" /> button in the top right corner to upload a new image. Uploaded
+images are shown in the carousel where you can download or delete them by
+clicking the icons that appear when you mouseover the picture.</p>
+<h2>Using Pictures</h2>
+<p>You can either click on a picture in the carousel, drag a thumbnail from the
+carousel onto a display pane or drag one of the display pane images into the
+other to load an image. The copy left to right and copy right to left buttons
+will copy the pictures in the display pane to each other. The download button
+(<img src="{{ url_for('static', filename='icons/drive_disk.png') }}"
+alt="download" />) saves the right hand image to your computer, while the save
+button (<img src="{{ url_for('static', filename='icons/disk.png') }}"
+alt="save" />) saves the right hand image to the session for later use.</p>
+<h2>Zoom</h2>
+<p>Clicking the zoom icon (<img
+src="{{ url_for('static', filename='icons/zoom.png') }}" alt="zoom" />) toggles
+image zoom. When enabled, mousing over the display pane images will reveal a
+zoomed in image that moves with the mouse. Both left and right image panes 
+are zoomable.</p>
+<h2>Image Editing Tools</h2>
+<p>The rest of the tools are used to edit the image. They apply to the left
+hand image and the results are shown on the right hand side. Click a tool to
+activate it, then use the new box that opens and/or interact with the image as
+appropriate to edit.</p>
+</section>
 
 <p>
     Website uses 

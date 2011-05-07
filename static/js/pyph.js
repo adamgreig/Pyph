@@ -200,6 +200,7 @@ $('.image').draggable({revert: true, helper: 'clone'});
 // ...and droppable
 $('.image').droppable({
     tolerance: 'pointer',
+    accept: '.image, .picture-thumb',
     activate: function(e, ui) {
         $(this).css('opacity', '.8');
     },
@@ -219,6 +220,14 @@ $('.image').droppable({
             $(this).siblings().children().attr('src', src+'.h.png');
         }
     },
+});
+
+// Make the help window a dialog
+$('#help').dialog({
+    autoOpen: false,
+    title: "Help",
+    modal: true,
+    width: 500
 });
 
 /********************************************************************
@@ -311,6 +320,12 @@ $('#r2l').click(function() {
 // Bind "Download image to PC" button
 $('#download').click(function() {
     location.href = download_link($('#r-image').attr('src'));
+});
+
+// Bind "Help?" link
+$('#show_help').click(function(e) {
+    e.preventDefault();
+    $('#help').dialog('open');
 });
 
 /********************************************************************
