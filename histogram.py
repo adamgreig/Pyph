@@ -1,7 +1,7 @@
 # Pyph Histogram
 # Generate histograms of images
 # Copyright 2011 Adam Greig
-# CC-BY 2.0 UK:England & Wales
+# Released under the simplified BSD license, see LICENSE
 
 import Image
 import numpy
@@ -9,6 +9,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg
 from matplotlib.figure import Figure
 
 def gen_histogram(infile, outfile):
+    """Generate a colour histogram for the infile, saving to outfile."""
     im = Image.open(infile)
     a = numpy.asarray(im)
     w, h, c = a.shape

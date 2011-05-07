@@ -127,6 +127,19 @@ src="{{ url_for('static', filename='icons/arrow_rotate_anticlockwise.png') }}"
     </button>
 </section>
 
+<!-- toolpanes -->
+<section id="crop-pane" class="toolpane">
+    <img src="{{ url_for('static', filename='icons/cross.png') }}"
+        alt="close" class="toolpane-close tip" title="Close" />
+    <h2>Crop</h2>
+    <p>Click and drag on the left hand image to select your crop area!</p>
+    <label for="crop-x">x: </label><input id="crop-x" size="4" />
+    <label for="crop-y">y: </label><input id="crop-y" size="4" />
+    <label for="crop-x2">x2: </label><input id="crop-x2" size="4" />
+    <label for="crop-y2">y2: </label><input id="crop-y2" size="4" />
+    <button id="crop-go">Crop!</button>
+</section>
+
 <!-- footer -->
 <footer>
 
@@ -231,7 +244,9 @@ appropriate to edit.</p>
     </a> on
     <a href="http://python.org" title="Python homepage">
         Python
-    </a>.
+    </a>.<br />
+    Stock images from <a href="http://flickr.com/photos/randomskk"
+        title="randomskk's photostream on flickr">my flickr</a>.
 </p>
 <p>
     <a href="/reset" title="reset everything" id="reset-link">

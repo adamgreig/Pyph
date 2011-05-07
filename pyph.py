@@ -12,6 +12,7 @@ from flask import send_file
 from flaskext import uploads
 
 from histogram import gen_histogram
+from crop import do_crop
 
 app = Flask(__name__)
 app.config.from_object("config")
@@ -26,6 +27,19 @@ def setup_session():
             session['files'].append({"name": "stock/"+filename,
                 "url": photos.url("stock/"+filename)})
             session.modified = True
+
+def path_from_filename(filename):
+    if '..' not in filename:
+        return app.config['UPLOADED_FILES_DEST'] + '/' + filename
+    else:
+        return False
+
+def temp_file_path(ip, ext):
+    name = uuid.uuid4().hex + ext
+    return app.config['UPLOADED_FILES_DEST'] + '/' + ip + '/' + name
+
+def url_from_path(path):
+    return photos.url('/'.join(path.split('/')[-2:]))
 
 @app.before_request
 def pre_check():
@@ -67,7 +81,7 @@ def download(filename):
 @app.route("/save/<path:filename>")
 def save(filename):
     """Save an existing file into the session"""
-    path = os.path.abspath(app.config['UPLOADED_FILES_DEST'] + '/' + filename)
+    path = os.path.abspath(path_from_filename(filename))
     e = os.path.exists
     if e(path) and e(path+'.t.jpg') and e(path+'.h.png'):
         ip = request.environ['REMOTE_ADDR']
@@ -138,6 +152,17 @@ def reset():
         delete(name)
     setup_session()
     return "OK"
+
+@app.route("/crop/<path:filename>", methods=['POST'])
+def crop(filename):
+    path = path_from_filename(filename)
+    if(os.path.exists(path)):
+        ip = request.environ["REMOTE_ADDR"]
+        ext = os.path.splitext(path)[1]
+        tmp = temp_file_path(request.environ["REMOTE_ADDR"], ext)
+        do_crop(path, tmp, request.form)
+        gen_histogram(tmp, tmp+".h.png")
+        return jsonify({'url': url_from_path(tmp)})
 
 if __name__ == "__main__":
     app.debug = True

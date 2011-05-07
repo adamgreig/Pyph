@@ -102,6 +102,14 @@ function link(src, noun) {
     return '/' + noun + '/' + parts[length - 2] + '/' + parts[length - 1];
 }
 
+// Put the coordinates from jCrop into the boxes
+function crophandler(c) {
+    $('#crop-x').attr('value', c.x);
+    $('#crop-x2').attr('value', c.x2);
+    $('#crop-y').attr('value', c.y);
+    $('#crop-y2').attr('value', c.y2);
+}
+
 /********************************************************************
  * Set up jQuery plugins
  *******************************************************************/
@@ -280,11 +288,6 @@ $('.picture-thumb').live('click', function() {
     set_display($(this).attr('src'));
 });
 
-// Bind clicking on l-image to enable jCrop
-$('#l-image').live('click', function() {
-    //jcrop_api = $.Jcrop('#l-image', {boxWidth: 500, boxHeight: 500});
-});
-
 // Bind zoom button
 $('#zoom-label').click(function() {
     if($("#zoom").attr('checked')) {
@@ -331,6 +334,66 @@ $('#download').click(function() {
 $('#show_help').click(function(e) {
     e.preventDefault();
     $('#help').dialog('open');
+});
+
+// Bind toolpane close buttons
+$('.toolpane-close').click(function() {
+    $(this).parent().hide('blind');
+});
+
+// Bind tool buttons to hide any open panes, stopping propagation if the
+// button's own pane was the open one.
+$('.tool').click(function(e) {
+    if($('.toolpane:visible').length) {
+        var tp = $(this).attr('id') + '-pane';
+        var own = $('.toolpane:visible').attr('id') == tp;
+        $('.toolpane:visible .toolpane-close').click();
+        if(own) {
+            e.stopImmediatePropagation();
+        }
+    }
+});
+
+// Bind crop tool button
+var jcrop_api;
+$('#crop').click(function() {
+    if(jcrop_api) { jcrop_api.destroy(); }
+    $('#l-image').draggable('option', 'disabled', true);
+    $('#l-image').droppable('option', 'disabled', true);
+    
+    // Slight hack to find the original image size
+    $("<img />").attr('src', $('#l-image').attr('src')).load(function() {
+        jcrop_api = $.Jcrop('#l-image', {
+            trueSize: [this.width, this.height],
+            onChange: crophandler,
+            onSelect: crophandler,
+            setSelect: [10, 10, 100, 100]
+        });
+        $('#crop-pane').show('blind');
+    });
+});
+
+// Bind crop close button
+$('#crop-pane .toolpane-close').click(function() {
+    jcrop_api.destroy();
+    $('#l-image').draggable('option', 'disabled', false);
+    $('#l-image').droppable('option', 'disabled', false);
+});
+
+// Bind crop button itself
+$('#crop-go').click(function() {
+    var data = {
+        'x': $('#crop-x').attr('value'),
+        'y': $('#crop-y').attr('value'),
+        'x2': $('#crop-x2').attr('value'),
+        'y2': $('#crop-y2').attr('value')
+    };
+    $.post(link($('#l-image').attr('src'), 'crop'), data, function(d, s ) {
+        if(d.url) {
+            $('#r-image').attr('src', d.url);
+            $('#r-image-h').attr('src', d.url+'.h.png');
+        }
+    });
 });
 
 /********************************************************************
