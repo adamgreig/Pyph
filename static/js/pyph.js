@@ -445,7 +445,32 @@ $('#crop-go').click(function() {
         'x2': $('#crop-x2').attr('value'),
         'y2': $('#crop-y2').attr('value')
     };
-    $.post(link($('#l-image').attr('src'), 'crop'), data, function(d, s ) {
+    $.post(link($('#l-image').attr('src'), 'crop'), data, function(d, s) {
+        if(d.url) {
+            $('#r-image').attr('src', d.url);
+            $('#r-image-h').attr('src', d.url+'.h.png');
+        }
+    });
+});
+
+/********************************************************************
+ * Resize Tool
+ * goto:resize
+ */
+
+// Bind resize tool button
+$('#resize').click(function() {
+    $('#resize-pane').show('blind');
+});
+
+// Bind resize button
+$('#resize-go').click(function() {
+    var data = {
+        'x': $('#resize-x').attr('value'),
+        'y': $('#resize-y').attr('value'),
+        'sf': $('#resize-sf').attr('value')
+    };
+    $.post(link($('#l-image').attr('src'), 'resize'), data, function(d, s) {
         if(d.url) {
             $('#r-image').attr('src', d.url);
             $('#r-image-h').attr('src', d.url+'.h.png');

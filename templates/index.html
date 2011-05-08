@@ -140,6 +140,21 @@ src="{{ url_for('static', filename='icons/arrow_rotate_anticlockwise.png') }}"
     <button id="crop-go">Crop!</button>
 </section>
 
+<section id="resize-pane" class="toolpane">
+    <img src="{{ url_for('static', filename='icons/cross.png') }}"
+        alt="close" class="toolpane-close tip" title="Close" />
+    <h2>Resize</h2>
+    <p>Enter either a new image size or a scaling factor, then click
+    Resize</p>
+    <label for="resize-x">new x: </label><input id="resize-x" size="4" />
+    <label for="resize-y">new y: </label><input id="resize-y" size="4" />
+    <br />
+    <label for="resize-sf">scale factor: </label>
+    <input id="resize-sf" size="4" />
+    <br />
+    <button id="resize-go">Resize!</button>
+</section>
+
 <!-- footer -->
 <footer>
 
