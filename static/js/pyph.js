@@ -376,7 +376,9 @@ $('#show-keyboard-shortcuts').click(function(e) {
 
 // Bind toolpane close buttons
 $('.toolpane-close').click(function() {
-    $(this).parent().hide('blind');
+    if($(this).parent().is(':visible')) {
+        $(this).parent().hide('blind');
+    }
 });
 
 // Bind tool buttons to hide any open panes, stopping propagation if the
@@ -529,6 +531,11 @@ $(document).bind('keypress', 'shift+?', function(){$('#show-help').click();});
 // k for keyboard shortcuts
 $(document).bind('keypress', 'k', function(){
     $('#show-keyboard-shortcuts').click();});
+
+// Escape for closing toolpanes
+$(document).bind('keydown', 'esc', function(){
+    $('.toolpane-close').click();
+});
 
 
 /********************************************************************
