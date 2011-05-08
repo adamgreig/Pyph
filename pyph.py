@@ -91,7 +91,7 @@ def upload():
     elif request.method == 'POST' and 'file' in request.files:
         ip = request.environ['REMOTE_ADDR']
         name = uuid.uuid4().hex
-        name += os.path.splitext(request.files['file'].filename)[1]
+        name += os.path.splitext(request.files['file'].filename)[1].lower()
         filename = photos.save(request.files['file'], folder=ip, name=name)
         path = photos.path(filename)
         gen_thumbnail(path, path+".t.jpg")
