@@ -105,15 +105,15 @@ src="{{ url_for('static', filename='icons/arrow_rotate_anticlockwise.png') }}"
         <img src="{{ url_for('static', filename='icons/lightning.png') }}"
             alt="morph" />
     </button>
-    <button id="colour_shift" class="tool tip" title="colour shift">
+    <button id="colour-shift" class="tool tip" title="colour shift">
         <img src="{{ url_for('static', filename='icons/color_wheel.png') }}"
             alt="colour shift" />
     </button>
-    <button id="lighting_shift" class="tool tip" title="lighting shift">
+    <button id="lighting-shift" class="tool tip" title="lighting shift">
         <img src="{{ url_for('static', filename='icons/contrast.png') }}"
             alt="lighting shift" />
     </button>
-    <button id="add_noise" class="tool tip" title="add noise">
+    <button id="add-noise" class="tool tip" title="add noise">
         <img src="{{ url_for('static', filename='icons/sound.png') }}"
             alt="add noise" />
     </button>
@@ -154,7 +154,8 @@ src="{{ url_for('static', filename='icons/arrow_rotate_anticlockwise.png') }}"
     </a>. Source on
     <a href="https://github.com/adamgreig/Pyph" title="source on github">
         GitHub
-    </a>. <a href="#" id="show_help">Help?</a>
+    </a>. <a href="#" id="show-keyboard-shortcuts">Keyboard Shortcuts</a>.
+    <a href="#" id="show-help">Help?</a>
 </p>
 
 <section id="help">
@@ -183,6 +184,23 @@ are zoomable.</p>
 hand image and the results are shown on the right hand side. Click a tool to
 activate it, then use the new box that opens and/or interact with the image as
 appropriate to edit.</p>
+</section>
+<section id="keyboard-shortcuts">
+<h2>Keyboard Shortcuts</h2>
+<strong>z</strong>: zoom<br />
+<strong>l</strong>: copy left image to right<br />
+<strong>h</strong>: copy right image to left<br />
+<strong>s</strong>: save right image to session<br />
+<strong>d</strong>: download right image<br />
+<strong>c</strong>: crop<br />
+<strong>r</strong>: resize<br />
+<strong>o</strong>: rotate<br />
+<strong>m</strong>: morph<br />
+<strong>c</strong>: colour shift<br />
+<strong>i</strong>: lighting shift<br />
+<strong>n</strong>: add noise<br />
+<strong>f</strong>: filter<br />
+<strong>e</strong>: enhance<br />
 </section>
 
 <p>
@@ -257,10 +275,10 @@ appropriate to edit.</p>
 
 <!-- scripts -->
 <script
-    src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.js">
+    src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js">
 </script>
 <script
-    src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.js">
+    src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js">
 </script>
 <script
     src="{{ url_for('static', filename='js/jquery.Jcrop.min.js') }}">
@@ -282,6 +300,9 @@ appropriate to edit.</p>
 </script>
 <script
     src="{{ url_for('static', filename='js/jquery.jcarousel.min.js') }}">
+</script>
+<script
+    src="{{ url_for('static', filename='js/jquery.hotkeys.min.js') }}">
 </script>
 <script
     src="{{ url_for('static', filename='js/pyph.js') }}">

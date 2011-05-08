@@ -219,10 +219,18 @@ $('.image').droppable({
     },
 });
 
-// Make the help window a dialog
+// Make the help window a dialogue
 $('#help').dialog({
     autoOpen: false,
     title: "Help",
+    modal: true,
+    width: 500
+});
+
+// Make the keyboard shortcuts window a dialogue
+$('#keyboard-shortcuts').dialog({
+    autoOpen: false,
+    title: "Keyboard Shortcuts",
     modal: true,
     width: 500
 });
@@ -292,8 +300,10 @@ $('.picture-thumb').live('click', function() {
 $('#zoom-label').click(function() {
     if($("#zoom").attr('checked')) {
         remove_zoom();
+        $('#zoom').attr('checked', false);
     } else {
         apply_zoom();
+        $('#zoom').attr('checked', true);
     }
 });
 
@@ -331,9 +341,15 @@ $('#download').click(function() {
 });
 
 // Bind "Help?" link
-$('#show_help').click(function(e) {
+$('#show-help').click(function(e) {
     e.preventDefault();
     $('#help').dialog('open');
+});
+
+// Bind "Keyboard Shortcuts" link
+$('#show-keyboard-shortcuts').click(function(e) {
+    e.preventDefault();
+    $('#keyboard-shortcuts').dialog('open');
 });
 
 // Bind toolpane close buttons
@@ -395,6 +411,53 @@ $('#crop-go').click(function() {
         }
     });
 });
+
+/********************************************************************
+ * Keyboard shortcuts
+ *******************************************************************/
+
+// z for zoom
+$(document).bind('keypress', 'z', function(){$('#zoom-label').click();});
+
+// l for copy left to right
+$(document).bind('keypress', 'l', function(){$('#l2r').click();});
+
+// h for copy right to left (vim-style hjkl nav)
+$(document).bind('keypress', 'h', function(){$('#r2l').click();});
+
+// s for save image to session
+$(document).bind('keypress', 's', function(){$('#save').click();});
+
+// d for download image
+$(document).bind('keypress', 'd', function(){$('#download').click();});
+
+// c for crop
+$(document).bind('keypress', 'c', function(){$('#crop').click();});
+
+// r for resize
+$(document).bind('keypress', 'r', function(){$('#resize').click();});
+
+// o for rotate
+$(document).bind('keypress', 'o', function(){$('#rotate').click();});
+
+// m for morph
+$(document).bind('keypress', 'm', function(){$('#morph').click();});
+
+// c for colour shift
+$(document).bind('keypress', 'c', function(){$('#colour-shift').click();});
+
+// i for lighting shift
+$(document).bind('keypress', 'i', function(){$('#lighting-shift').click();});
+
+// n for add noise
+$(document).bind('keypress', 'n', function(){$('#add-noise').click();});
+
+// f for filter
+$(document).bind('keypress', 'f', function(){$('#filter').click();});
+
+// e for enhance
+$(document).bind('keypress', 'e', function(){$('#enhance').click();});
+
 
 /********************************************************************
  * Code to be executed at startup
