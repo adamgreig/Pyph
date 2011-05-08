@@ -142,11 +142,11 @@ $('#picture-upload').fileUploadUI({
                 '<\/span><img class="picture-thumb" src="' + file.url +
                 '.t.jpg"\/><\/li>"');
         } else {
-            return $('');
+            return $('<li>error</li>');
         }
     },
     onError: function(event, files, index, xhr, handler) {
-        alert("Error uploading file.");
+        alert("Error uploading file. Check file size and format.");
     },
     beforeSend: function(event, files, index, xhr, handler, callBack) {
         // Get rid of any "no-pictures" message
@@ -471,6 +471,13 @@ $(document).bind('keypress', 'f', function(){$('#filter').click();});
 
 // e for enhance
 $(document).bind('keypress', 'e', function(){$('#enhance').click();});
+
+// ? for help
+$(document).bind('keypress', 'shift+?', function(){$('#show-help').click();});
+
+// k for keyboard shortcuts
+$(document).bind('keypress', 'k', function(){
+    $('#show-keyboard-shortcuts').click();});
 
 
 /********************************************************************
