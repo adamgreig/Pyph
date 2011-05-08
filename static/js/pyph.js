@@ -319,14 +319,13 @@ $('.picture-thumb').live('click', function() {
 });
 
 // Bind zoom button
-$('#zoom-label').click(function() {
+$('#zoom-label').click(function(e) {
     if($('.cloud-zoom').length) {
         remove_zoom();
-        $('#zoom').attr('checked', false);
     } else {
         apply_zoom();
-        $('#zoom').attr('checked', true);
     }
+    e.stopPropagation();
 });
 
 // Bind "copy left to right" button
