@@ -87,10 +87,12 @@ function apply_zoom() {
 
 // Remove zoom from the pictures
 function remove_zoom() {
-    var l = $('#l-image').clone();
-    var r = $('#r-image').clone();
-    $('#l-image-wrapper').children().first().remove();
-    $('#r-image-wrapper').children().first().remove();
+    var l = $('#l-image');
+    var r = $('#r-image');
+    l.detach();
+    r.detach();
+    $('#l-image-wrapper').children('#wrap').remove();
+    $('#r-image-wrapper').children('#wrap').remove();
     $('#l-image-wrapper').prepend(l);
     $('#r-image-wrapper').prepend(r);
 }
@@ -140,7 +142,7 @@ $('#picture-upload').fileUploadUI({
                 '<\/span><img class="picture-thumb" src="' + file.url +
                 '.t.jpg"\/><\/li>"');
         } else {
-            return;
+            return $('');
         }
     },
     onError: function(event, files, index, xhr, handler) {
@@ -298,7 +300,7 @@ $('.picture-thumb').live('click', function() {
 
 // Bind zoom button
 $('#zoom-label').click(function() {
-    if($("#zoom").attr('checked')) {
+    if($('.cloud-zoom').length) {
         remove_zoom();
         $('#zoom').attr('checked', false);
     } else {
@@ -370,10 +372,22 @@ $('.tool').click(function(e) {
     }
 });
 
+/********************************************************************
+ * Crop Tool
+ *******************************************************************/
+
 // Bind crop tool button
 var jcrop_api;
 $('#crop').click(function() {
+    // Take off zoom if it's on, as it'l mess stuff up
+    if($('#zoom').attr('checked')) {
+        $('#zoom-label').click();
+    }
+
+    // Remove any old jCrop instances
     if(jcrop_api) { jcrop_api.destroy(); }
+
+    // Make the images non-draggable
     $('#l-image').draggable('option', 'disabled', true);
     $('#l-image').droppable('option', 'disabled', true);
     
