@@ -6,6 +6,7 @@
 
 /********************************************************************
  * Helper Functions
+ * goto:func
  *******************************************************************/
 
 // Check if any pictures are in the picture bar and if not add the
@@ -114,6 +115,7 @@ function crophandler(c) {
 
 /********************************************************************
  * Set up jQuery plugins
+ * goto:plugins
  *******************************************************************/
 
 // Set up the file upload button.
@@ -121,6 +123,7 @@ $('#picture-upload').fileUploadUI({
     uploadTable: $('#picture-bar'),
     cancelSelector: ".picture-upload-cancel",
     sequentialUploads: true,
+    dragDropSupport: false,
     buildUploadRow: function(files, index, handler) {
         // Returns an <li> suitable for inserting into the jCarousel,
         //  containing a loading animation and a box with a cancel button.
@@ -142,11 +145,29 @@ $('#picture-upload').fileUploadUI({
                 '<\/span><img class="picture-thumb" src="' + file.url +
                 '.t.jpg"\/><\/li>"');
         } else {
-            return $('<li>error</li>');
+            // there was an error or something, so deal
+            return false;
         }
     },
     onError: function(event, files, index, xhr, handler) {
         alert("Error uploading file. Check file size and format.");
+        handler.uploadRow.remove();
+        var pics = $('#picture-bar li');
+        var c = $('#picture-bar').data('jcarousel');
+        pics.detach();
+        c.scroll(0, false);
+        c.reset();
+        pics.each(function(i,e){
+            console.log("adding ");
+            console.log(e);
+            console.log("to");
+            console.log(i);
+            $('#picture-bar').jcarousel('add',i + 1,e);
+        });
+        $('#picture-bar').jcarousel('size', pics.length);
+        bind_thumbs();
+        check_for_no_pictures();
+        return false;
     },
     beforeSend: function(event, files, index, xhr, handler, callBack) {
         // Get rid of any "no-pictures" message
@@ -160,7 +181,7 @@ $('#picture-upload').fileUploadUI({
             var c = $('#picture-bar').data('jcarousel');
             c.add(i, node[0]);
             c.size(i);
-            c.scroll(i);
+            c.scroll(i, false);
             bind_thumbs();
         }
         if(typeof callBack === 'function') {
@@ -239,6 +260,7 @@ $('#keyboard-shortcuts').dialog({
 
 /********************************************************************
  * Bind event handlers
+ * goto:bind
  *******************************************************************/
 
 // Bind the delete icons to submit an AJAX deletion request, then fade out
@@ -374,6 +396,7 @@ $('.tool').click(function(e) {
 
 /********************************************************************
  * Crop Tool
+ * goto:crop
  *******************************************************************/
 
 // Bind crop tool button
@@ -428,6 +451,7 @@ $('#crop-go').click(function() {
 
 /********************************************************************
  * Keyboard shortcuts
+ * goto:keyboard
  *******************************************************************/
 
 // z for zoom
@@ -482,6 +506,7 @@ $(document).bind('keypress', 'k', function(){
 
 /********************************************************************
  * Code to be executed at startup
+ * goto:exec
  *******************************************************************/
 
 // Get the first pictures
