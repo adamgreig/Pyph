@@ -155,16 +155,12 @@ $('#picture-upload').fileUploadUI({
         var pics = $('#picture-bar li');
         var c = $('#picture-bar').data('jcarousel');
         pics.detach();
+        var index = c.first;
         c.scroll(0, false);
         c.reset();
-        pics.each(function(i,e){
-            console.log("adding ");
-            console.log(e);
-            console.log("to");
-            console.log(i);
-            $('#picture-bar').jcarousel('add',i + 1,e);
-        });
-        $('#picture-bar').jcarousel('size', pics.length);
+        pics.each(function(i,e){$('#picture-bar').jcarousel('add',i + 1,e);});
+        c.size(pics.length);
+        c.scroll(index, false); 
         bind_thumbs();
         check_for_no_pictures();
         return false;
