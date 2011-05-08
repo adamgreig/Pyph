@@ -300,9 +300,11 @@ $('.picture-delete').live('click', function(e) {
         $(this).remove();
         var pics = $('#picture-bar li');
         pics.detach();
+        var index = c.first;
         c.reset();
         pics.each(function(i,e){$('#picture-bar').jcarousel('add',i + 1,e);});
-        $('#picture-bar').jcarousel('size', pics.length);
+        c.size(pics.length);
+        c.scroll(index, false); 
         bind_thumbs();
         check_for_no_pictures();
     });
