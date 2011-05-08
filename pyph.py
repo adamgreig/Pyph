@@ -49,7 +49,6 @@ def remove_temp_files(ip, butnot):
     for f in files:
         if f[:4] == 'tmp-':
             path = photos.path(ip+'/'+f)
-            print "in remove_temp_files, path=", path, "butnot=", butnot
             if path[:len(butnot)] != butnot:
                 os.remove(path)
 

@@ -399,6 +399,10 @@ $('.tool').click(function(e) {
  * goto:crop
  *******************************************************************/
 
+function click_crop_go() {
+    $('#crop-go').click();
+}
+
 // Bind crop tool button
 var jcrop_api;
 $('#crop').click(function() {
@@ -413,9 +417,6 @@ $('#crop').click(function() {
     // Make the images non-draggable
     $('#l-image').draggable('option', 'disabled', true);
     $('#l-image').droppable('option', 'disabled', true);
-
-    // Add a keyboard shortcut for enter to map to the crop button
-    $(document).bind('keypress', 13, function(){$('#crop-go').click();});
     
     // Slight hack to find the original image size
     $("<img />").attr('src', $('#l-image').attr('src')).load(function() {
@@ -434,7 +435,6 @@ $('#crop-pane .toolpane-close').click(function() {
     jcrop_api.destroy();
     $('#l-image').draggable('option', 'disabled', false);
     $('#l-image').droppable('option', 'disabled', false);
-    $(document).bind('keypress', 13, function(){});
 });
 
 // Bind crop button itself
@@ -511,10 +511,12 @@ $(document).bind('keypress', 'o', function(){$('#rotate').click();});
 $(document).bind('keypress', 'm', function(){$('#morph').click();});
 
 // c for colour shift
-$(document).bind('keypress', 'c', function(){$('#colour-shift').click();});
+$(document).bind('keypress', 'shift+c', function(){
+    $('#colour-shift').click();});
 
 // i for lighting shift
-$(document).bind('keypress', 'i', function(){$('#lighting-shift').click();});
+$(document).bind('keypress', 'shift+l', function(){
+    $('#lighting-shift').click();});
 
 // n for add noise
 $(document).bind('keypress', 'n', function(){$('#add-noise').click();});
