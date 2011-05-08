@@ -413,6 +413,9 @@ $('#crop').click(function() {
     // Make the images non-draggable
     $('#l-image').draggable('option', 'disabled', true);
     $('#l-image').droppable('option', 'disabled', true);
+
+    // Add a keyboard shortcut for enter to map to the crop button
+    $(document).bind('keypress', 13, function(){$('#crop-go').click();});
     
     // Slight hack to find the original image size
     $("<img />").attr('src', $('#l-image').attr('src')).load(function() {
@@ -431,6 +434,7 @@ $('#crop-pane .toolpane-close').click(function() {
     jcrop_api.destroy();
     $('#l-image').draggable('option', 'disabled', false);
     $('#l-image').droppable('option', 'disabled', false);
+    $(document).bind('keypress', 13, function(){});
 });
 
 // Bind crop button itself
