@@ -150,7 +150,7 @@ $('#picture-upload').fileUploadUI({
         }
     },
     onError: function(event, files, index, xhr, handler) {
-        alert("Error uploading file. Check file size and format.");
+        $('#upload-error').dialog('open');
         handler.uploadRow.remove();
         var pics = $('#picture-bar li');
         var c = $('#picture-bar').data('jcarousel');
@@ -252,6 +252,15 @@ $('#keyboard-shortcuts').dialog({
     title: "Keyboard Shortcuts",
     modal: true,
     width: 500
+});
+
+// Make the upload error window a dialogue
+$('#upload-error').dialog({
+    autoOpen: false,
+    title: "Upload Error",
+    modal: true,
+    width: 700,
+    buttons: {OK: function(){$(this).dialog('close');}}
 });
 
 /********************************************************************
