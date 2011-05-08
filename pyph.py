@@ -32,26 +32,26 @@ def setup_session():
                 "url": photos.url("stock/"+filename)})
             session.modified = True
 
-def path_from_filename(filename):
-    """Go from a submitted filename to a path on disk."""
-    if '..' not in filename:
-        return app.config['UPLOADED_FILES_DEST'] + filename
-    else:
-        return False
-
 def temp_file_path(ip, ext):
     """Generate a temporary file path."""
     name = uuid.uuid4().hex + ext
-    path = app.config['UPLOADED_FILES_DEST'] + ip + '/tmp-'
-    return path + name
+    return photos.path(ip + '/tmp-' + name)
 
 def url_from_path(path):
     """Turn a file path into a URL."""
     return photos.url('/'.join(path.split('/')[-2:]))
 
-def remove_temp_files(ip):
-    """Remove tmp-* files from a given IP."""
-    pass
+def remove_temp_files(ip, butnot):
+    """Remove tmp-* files from a given IP except the path in butnot"""
+    path = photos.path(ip+'/tmp')
+    user_dir = os.path.split(path)[0]
+    files = os.listdir(user_dir)
+    for f in files:
+        if f[:4] == 'tmp-':
+            path = photos.path(ip+'/'+f)
+            print "in remove_temp_files, path=", path, "butnot=", butnot
+            if path[:len(butnot)] != butnot:
+                os.remove(path)
 
 def operate(func, filename):
     """
@@ -59,10 +59,10 @@ def operate(func, filename):
     generate required histograms and thumbnails, then return the new
     image's URL.
     """
-    path = path_from_filename(filename)
+    path = photos.path(filename)
     if(os.path.exists(path)):
         ip = request.environ["REMOTE_ADDR"]
-        remove_temp_files(ip)
+        remove_temp_files(ip, path)
         ext = os.path.splitext(path)[1]
         tmp = temp_file_path(request.environ["REMOTE_ADDR"], ext)
         func(path, tmp, request.form)
@@ -110,7 +110,7 @@ def download(filename):
 @app.route("/save/<path:filename>")
 def save(filename):
     """Save an existing file into the session"""
-    path = os.path.abspath(path_from_filename(filename))
+    path = photos.path(filename)
     e = os.path.exists
     if e(path) and e(path+'.t.jpg') and e(path+'.h.png'):
         ip = request.environ['REMOTE_ADDR']
