@@ -14,6 +14,7 @@ from flaskext import uploads
 from histogram import gen_histogram
 from thumbnail import gen_thumbnail
 from crop import do_crop
+from resize import do_resize
 
 app = Flask(__name__)
 app.config.from_object("config")
@@ -184,6 +185,10 @@ def reset():
 @app.route("/crop/<path:filename>", methods=['POST'])
 def crop(filename):
     return operate(do_crop, filename)
+
+@app.route("/resize/<path:filename>", methods=['POST'])
+def resize(filename):
+    return operate(do_resize, filename)
 
 if __name__ == "__main__":
     app.debug = True

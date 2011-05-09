@@ -107,10 +107,10 @@ function link(src, noun) {
 
 // Put the coordinates from jCrop into the boxes
 function crophandler(c) {
-    $('#crop-x').attr('value', c.x);
-    $('#crop-x2').attr('value', c.x2);
-    $('#crop-y').attr('value', c.y);
-    $('#crop-y2').attr('value', c.y2);
+    $('#crop-x').val(c.x);
+    $('#crop-x2').val(c.x2);
+    $('#crop-y').val(c.y);
+    $('#crop-y2').val(c.y2);
 }
 
 /********************************************************************
@@ -448,10 +448,10 @@ $('#crop-pane .toolpane-close').click(function() {
 // Bind crop button itself
 $('#crop-go').click(function() {
     var data = {
-        'x': $('#crop-x').attr('value'),
-        'y': $('#crop-y').attr('value'),
-        'x2': $('#crop-x2').attr('value'),
-        'y2': $('#crop-y2').attr('value')
+        'x': $('#crop-x').val(),
+        'y': $('#crop-y').val(),
+        'x2': $('#crop-x2').val(),
+        'y2': $('#crop-y2').val()
     };
     $.post(link($('#l-image').attr('src'), 'crop'), data, function(d, s) {
         if(d.url) {
@@ -464,19 +464,31 @@ $('#crop-go').click(function() {
 /********************************************************************
  * Resize Tool
  * goto:resize
- */
+ *******************************************************************/
 
 // Bind resize tool button
 $('#resize').click(function() {
     $('#resize-pane').show('blind');
 });
 
+// Make radios pretty
+$('#resize-kind').buttonset();
+
+// Clear scale factor if w/h change
+$('#resize-w, #resize-h').change(function(){
+    $('#resize-sf').val('')});
+
+// Clear w/h if scale factor changes
+$('#resize-sf').change(function(){
+    $('#resize-w, #resize-h').val('')});
+
 // Bind resize button
 $('#resize-go').click(function() {
     var data = {
-        'x': $('#resize-x').attr('value'),
-        'y': $('#resize-y').attr('value'),
-        'sf': $('#resize-sf').attr('value')
+        'w': $('#resize-w').val(),
+        'h': $('#resize-h').val(),
+        'sf': $('#resize-sf').val(),
+        'kind': $('input:radio[name="resize-kind"]:checked').val()
     };
     $.post(link($('#l-image').attr('src'), 'resize'), data, function(d, s) {
         if(d.url) {

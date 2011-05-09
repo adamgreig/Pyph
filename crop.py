@@ -8,8 +8,6 @@ import numpy
 
 def do_crop(infile, outfile, c):
     """Crop infile, saving the result to outfile, by geometry in c."""
-    im = Image.open(infile)
-    a = numpy.asarray(im)
-    a = a[int(c['y']):int(c['y2']), int(c['x']):int(c['x2'])]
-    im = Image.fromarray(a)
-    im.save(outfile)
+    img = numpy.asarray(Image.open(infile))
+    img = img[int(c['y']):int(c['y2']), int(c['x']):int(c['x2'])]
+    Image.fromarray(img).save(outfile)
