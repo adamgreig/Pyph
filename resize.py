@@ -40,13 +40,24 @@ def do_resize(infile, outfile, c):
     # for each colour in the image, filter
     for colour_index in np.arange(3):
         colour = img[:, :, colour_index]
+
+        # Compute the first row of interpolations
+        prev_row = np.empty((w))
+        for col in range(w):
+            p = sample_x[col]
+            x1 = int(p)
+            x2 = int(p) + 1
+            v1 = int(colour[0, x1])
+            v2 = int(colour[0, x2])
+            prev_row[col] = linear(x1, v1, x2, v2, p)
+
         # a) I know scipy.interp2d exists, but using functions like that
         #    is not the point of this exercise
         # b) for now, bilinear only, despite what the web interface suggests
-        for row in np.arange(h):
-            for col in np.arange(w):
+        for row in range(h):
+            for col in range(w):
                 # get the sampling co-ords
-                sample = np.array((sample_y[row], sample_x[col]))
+                sample = (sample_y[row], sample_x[col])
 
                 # get the x, y co-ords of surrounding points
                 x1 = int(sample[1])
@@ -55,28 +66,29 @@ def do_resize(infile, outfile, c):
                 y2 = int(sample[0]) + 1
 
                 # get the values of those points
-                x1y1 = colour[y1, x1]
-                x1y2 = colour[y2, x1]
-                x2y1 = colour[y1, x2]
-                x2y2 = colour[y2, x2]
+                x1y1 = int(colour[y1, x1])
+                x1y2 = int(colour[y2, x1])
+                x2y1 = int(colour[y1, x2])
+                x2y2 = int(colour[y2, x2])
 
-                # interpolate along the first row
-                r1 = linear(np.array((x1, x1y1)), np.array((x2, x2y1)),
-                            sample[1])
+                # look up first row
+                r1 = prev_row[col]
 
                 # interpolate along the second row
-                r2 = linear(np.array((x1, x1y2)), np.array((x2, x2y2)),
-                            sample[1])
+                r2 = linear(x1, x1y2, x2, x2y2, sample[1])
+
+                # Update stored results
+                prev_row[col] = r2
 
                 # interpolate between r1 and r2 and save the result
-                new[row, col, colour_index] = linear(
-                    np.array((y1, r1)), np.array((y2, r2)), sample[0])
+                new[row, col, colour_index] = linear(y1, r1, y2, r2, sample[0])
 
-    Image.fromarray(new).save(outfile)
+    Image.fromarray(new).save(outfile, quality=95)
 
-def linear(a, b, p):
+def linear(x1, v1, x2, v2, p):
     """
-    Return the one dimensional linear interpolation of p between a and b.
-    a, b should be 2d containing their coordinate [0] and value [1].
+    Return the one dimensional linear interpolation of p between x1 and x2.
+    x1 and x2 are the two x-coordinates, v1 and v2 their respective values.
+    p is the to-be-interpolated x-coordinate.
     """
-    return a[1] + ((b[1] - a[1]) / (b[0] - a[0])) * (p - a[0])
+    return v1 + ((v2 - v1) / (x2 - x1)) * (p - x1)
