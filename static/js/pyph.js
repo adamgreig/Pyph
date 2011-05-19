@@ -263,6 +263,9 @@ $('#upload-error').dialog({
     buttons: {OK: function(){$(this).dialog('close');}}
 });
 
+// Bind ajaxStop to unblock the page
+$(document).ajaxStop($.unblockUI);
+
 /********************************************************************
  * Bind event handlers
  * goto:bind
@@ -402,6 +405,15 @@ $('.tool').click(function(e) {
     }
 });
 
+var reqXHR = null;
+// Bind the cancel button on the "processing..." dialogue
+$('#processing a').click(function(e) {
+    e.preventDefault();
+    if(typeof reqXHR !== undefined) {
+        reqXHR.abort();
+    }
+});
+
 /********************************************************************
  * Crop Tool
  * goto:crop
@@ -453,7 +465,9 @@ $('#crop-go').click(function() {
         'x2': $('#crop-x2').val(),
         'y2': $('#crop-y2').val()
     };
-    $.post(link($('#l-image').attr('src'), 'crop'), data, function(d, s) {
+    $.blockUI({message: $('#processing')});
+    reqXHR = $.post(link($('#l-image').attr('src'), 'crop'), data,
+    function(d, s) {
         if(d.url) {
             $('#r-image').attr('src', d.url);
             $('#r-image-h').attr('src', d.url+'.h.png');
@@ -490,7 +504,9 @@ $('#resize-go').click(function() {
         'sf': $('#resize-sf').val(),
         'kind': $('input:radio[name="resize-kind"]:checked').val()
     };
-    $.post(link($('#l-image').attr('src'), 'resize'), data, function(d, s) {
+    $.blockUI({message: $('#processing')});
+    reqXHR = $.post(link($('#l-image').attr('src'), 'resize'), data,
+    function(d, s) {
         if(d.url) {
             $('#r-image').attr('src', d.url);
             $('#r-image-h').attr('src', d.url+'.h.png');

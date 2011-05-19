@@ -173,6 +173,13 @@ src="{{ url_for('static', filename='icons/arrow_rotate_anticlockwise.png') }}"
     <button id="resize-go">Resize!</button>
 </section>
 
+<!-- processing message -->
+<section id="processing">
+<p><img src="/static/icons/loading.gif" alt="loading..." /></p>
+<p>Please wait, processing...</p>
+<p><a href="#" title="Cancel Request">Cancel</a></p>
+</section>
+
 <!-- footer -->
 <footer>
 
@@ -337,6 +344,9 @@ appropriate to edit.</p>
 </script>
 <script
     src="{{ url_for('static', filename='js/jquery.hotkeys.min.js') }}">
+</script>
+<script
+    src="{{ url_for('static', filename='js/jquery.blockUI.min.js') }}">
 </script>
 <script
     src="{{ url_for('static', filename='js/pyph.js') }}">
